@@ -33,6 +33,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/reminders/grid",
     name: "GridReminders",
     component: () => import("@/views/reminders/GridReminders.vue")
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/reminders/list"
   }
 ];
 
