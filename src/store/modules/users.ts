@@ -1,11 +1,14 @@
+// Hooks
+import Axios from "@/hook/Axios";
+// Services
 import UserService from "@/services/UserService";
+// Types
 import { UserTypes } from "@/types/UserTypes";
 
 const userService = new UserService();
 
 const state = () => ({
-  user: {},
-  error: ""
+  user: {}
 });
 
 const actions = {
@@ -15,9 +18,11 @@ const actions = {
       const { user: dataUser, auth, token } = data;
 
       if (auth) {
-        commit(UserTypes.LOGIN, { dataUser });
+        commit(UserTypes.SET_DATA, { dataUser });
 
         userService.setToken(token);
+
+        new Axios();
       }
 
       return auth;
@@ -28,7 +33,7 @@ const actions = {
 };
 
 const mutations = {
-  async [UserTypes.LOGIN](state: any, { dataUser }: any) {
+  async [UserTypes.SET_DATA](state: any, { dataUser }: any) {
     delete dataUser.createdAt;
     delete dataUser.updatedAt;
 

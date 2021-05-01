@@ -5,7 +5,7 @@
         <ion-buttons slot="start" v-if="formCode">
           <ion-back-button default-href="/login/phone"></ion-back-button>
         </ion-buttons>
-        <ion-title id="titleLogin">Inicia sesión</ion-title>
+        <ion-title id="titleLogin">Recordatorios</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -121,8 +121,6 @@ export default defineComponent({
 
         this.router.replace(`/reminders/list`);
       });
-
-      console.log(this.store.state);
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({

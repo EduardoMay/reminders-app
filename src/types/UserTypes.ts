@@ -2,5 +2,6 @@
  * User types for vuex
  */
 export const UserTypes = {
-  LOGIN: "loginUser"
+  LOGIN: "loginUser",
+  SET_DATA: "setDataUser",
 };

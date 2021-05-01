@@ -53,4 +53,10 @@ const router = createRouter({
   routes
 });
 
+router.beforeEach(async (to, from, next) => {
+  if (to.name !== "Login" && !(await user.verifyToken()))
+    next({ name: "Login" });
+  else next();
+});
+
 export default router;

@@ -14,11 +14,15 @@ export default class UserService {
 
     try {
       const { data } = await this.axios.get(`users/verify`);
-      const { auth } = data;
+      const { auth, token } = data;
 
-      if (auth) status = true;
-      else status = false;
+      if (auth) {
+        this.setToken(token);
+
+        status = true;
+      } else status = false;
     } catch ({ response }) {
+      this.clearToken();
       status = false;
     }
 
