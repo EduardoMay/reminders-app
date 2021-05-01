@@ -10,6 +10,7 @@ export default class Axios {
       "Content-Type": "application/json",
       Authorization: this.TOKEN
     };
+    axios.defaults.withCredentials = true;
   }
 
   /**
