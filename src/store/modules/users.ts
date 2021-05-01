@@ -29,6 +29,16 @@ const actions = {
     } catch ({ response }) {
       return false;
     }
+  },
+  async relogin({ commit }: any): Promise<any> {
+    const dataUser = await userService.relogin();
+
+    commit(UserTypes.SET_DATA, { dataUser });
+  },
+  async [UserTypes.LOGOUT]({ commit }: any): Promise<void> {
+    await userService.logout();
+
+    commit(UserTypes.LOGOUT);
   }
 };
 
@@ -38,6 +48,9 @@ const mutations = {
     delete dataUser.updatedAt;
 
     state.user = dataUser;
+  },
+  async [UserTypes.LOGOUT](state: any) {
+    state.user = {};
   }
 };
 

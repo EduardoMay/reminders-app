@@ -4,4 +4,5 @@
 export const UserTypes = {
   LOGIN: "loginUser",
   SET_DATA: "setDataUser",
+  LOGOUT: "logout"
 };

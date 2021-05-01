@@ -40,6 +40,38 @@ export default class UserService {
   }
 
   /**
+   * Re login user
+   * @return  {User | boolean} user or bolean
+   */
+  public async relogin(): Promise<User | boolean> {
+    let dataUser: User | boolean = { email: "" };
+
+    try {
+      const { data } = await this.axios.get(`users/verify`);
+      const { auth, user } = data;
+
+      if (auth) {
+        dataUser = user;
+      } else dataUser = false;
+    } catch ({ response }) {
+      this.clearToken();
+      dataUser = false;
+    }
+
+    return dataUser;
+  }
+
+  /**
+   * Logout user
+   * @return  {*}
+   */
+  public async logout(): Promise<void> {
+    await this.axios.get(`users/logout`);
+
+    this.clearToken();
+  }
+
+  /**
    * Set token with response of login is true
    * @param   {string}  token
    */
