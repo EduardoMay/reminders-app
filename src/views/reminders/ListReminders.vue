@@ -44,7 +44,7 @@ export default defineComponent({
     IonToolbar
   },
   setup() {
-    console.log("GRID");
+    console.log("List");
     return {
       menu
     };
