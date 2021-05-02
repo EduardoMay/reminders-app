@@ -3,15 +3,15 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button @click="openMenu()">
-            <ion-icon :icon="menu" slot="icon-only" />
+          <ion-button>
+            <ion-back-button default-href="/reminders/list"></ion-back-button>
           </ion-button>
         </ion-buttons>
-        <ion-title>Recordatorios</ion-title>
+        <ion-title>Nuevo recordatorio</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
-      <h1>List</h1>
+    <ion-content :fullscreen="true">
+      <h1>Form</h1>
     </ion-content>
   </ion-page>
 </template>
@@ -23,34 +23,27 @@ import {
   IonHeader,
   IonButtons,
   IonButton,
-  IonIcon,
   IonTitle,
   IonContent,
-  IonToolbar
+  IonToolbar,
+  IonBackButton
 } from "@ionic/vue";
-import { menu } from "ionicons/icons";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "ListReminders",
+  name: "NewReminder",
   components: {
     IonPage,
     IonHeader,
     IonButtons,
     IonButton,
-    IonIcon,
     IonTitle,
     IonContent,
-    IonToolbar
-  },
-  setup() {
-    console.log("List");
-    return {
-      menu
-    };
+    IonToolbar,
+    IonBackButton
   },
   methods: {
-    openMenu(): void {
+    openMenu() {
       menuController.open("menu");
     }
   }

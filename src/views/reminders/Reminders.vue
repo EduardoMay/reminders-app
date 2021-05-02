@@ -11,7 +11,9 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <h1>Grid</h1>
+      <list-reminders></list-reminders>
+
+      <button-float></button-float>
     </ion-content>
   </ion-page>
 </template>
@@ -20,37 +22,44 @@
 import {
   menuController,
   IonPage,
+  IonContent,
   IonHeader,
   IonButtons,
   IonButton,
   IonIcon,
   IonTitle,
-  IonContent,
   IonToolbar
 } from "@ionic/vue";
 import { menu } from "ionicons/icons";
 import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
+import ButtonFloat from "@/views/layouts/ButtonFloat.vue";
+import ListReminders from "@/components/reminders/ListReminders.vue";
 
 export default defineComponent({
-  name: "GridReminders",
+  name: "Reminders",
   components: {
     IonPage,
+    IonContent,
     IonHeader,
     IonButtons,
     IonButton,
     IonIcon,
     IonTitle,
-    IonContent,
-    IonToolbar
+    IonToolbar,
+    ButtonFloat,
+    ListReminders
   },
   setup() {
-    console.log("GRID");
+    const router = useRouter();
+
     return {
-      menu
+      menu,
+      router
     };
   },
   methods: {
-    openMenu() {
+    openMenu(): void {
       menuController.open("menu");
     }
   }

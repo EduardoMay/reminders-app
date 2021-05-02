@@ -18,6 +18,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/user",
     component: Login,
+    name: "Login",
     children: [
       {
         path: "",
@@ -30,20 +31,20 @@ const routes: Array<RouteRecordRaw> = [
       }
     ],
     beforeEnter: async (to, from, next) => {
-      if (to.name !== "ListReminders" && (await user.verifyToken()))
-        next({ name: "ListReminders" });
+      if (to.name !== "Reminders" && (await user.verifyToken()))
+        next({ name: "Reminders" });
       else next();
     }
   },
   {
-    path: "/reminders/list",
-    name: "ListReminders",
-    component: () => import("@/views/reminders/ListReminders.vue")
+    path: "/reminders",
+    name: "Reminders",
+    component: () => import("@/views/reminders/Reminders.vue")
   },
   {
-    path: "/reminders/grid",
-    name: "GridReminders",
-    component: () => import("@/views/reminders/GridReminders.vue")
+    path: "/reminders/new",
+    name: "NewReminder",
+    component: () => import("@/views/reminders/NewReminder.vue")
   },
   {
     path: "/:pathMatch(.*)*",
