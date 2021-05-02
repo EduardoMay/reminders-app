@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 
-import ListReminders from "@/views/reminders/ListReminders.vue";
+// Componentes
+import NotFound from "@/views/layouts/NotFound.vue";
 import Login from "@/views/user/Login.vue";
+
+// Services
 import UserService from "@/services/UserService";
 
 const user = new UserService();
@@ -44,7 +47,8 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/:pathMatch(.*)*",
-    redirect: "/reminders/list"
+    name: "404",
+    component: NotFound
   }
 ];
 
