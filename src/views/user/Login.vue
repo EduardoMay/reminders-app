@@ -119,7 +119,7 @@ export default defineComponent({
         if (!status)
           return this.openToast("Correo y contraseña son incorrectos");
 
-        this.router.replace(`/reminders/list`);
+        this.router.replace(`/reminders`);
       });
     },
     async openToast(title: string): Promise<any> {
