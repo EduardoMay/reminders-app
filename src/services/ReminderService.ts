@@ -20,4 +20,17 @@ export default class ReminderService {
 
     return reminders;
   }
+
+  /**
+   * Get all reminders by id user
+   * @param   {string}              idUser
+   * @return  {Promise<Reminder>[]}
+   */
+  public async getReminders(idUser: string): Promise<Reminder[]> {
+    const { data } = await this.axios.get(`reminders/${idUser}`);
+
+    const { reminders } = data;
+
+    return reminders;
+  }
 }

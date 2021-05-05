@@ -1,21 +1,9 @@
 <template>
-  <ion-list>
-    <ion-item>
+  <ion-list v-if="reminders.length > 0">
+    <ion-item v-for="reminder in reminders" :key="reminder._id">
       <ion-label>
-        Component
+        {{ reminder.title }}
       </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Mega Man X</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>The Legend of Zelda</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Pac-Man</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Super Mario World</ion-label>
     </ion-item>
   </ion-list>
 </template>
@@ -23,8 +11,10 @@
 <script lang="ts">
 import { menuController, IonList, IonItem, IonLabel } from "@ionic/vue";
 import { menu } from "ionicons/icons";
-import { defineComponent } from "vue";
+import { useStore } from "vuex";
+import { computed, defineComponent, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { ReminderTypes } from "@/types/ReminderTypes";
 
 export default defineComponent({
   name: "ListReminders",
@@ -35,10 +25,19 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
+
+    onMounted(async () => {
+      await store.dispatch(ReminderTypes.GET_REMINDERS, {
+        idUser: store.state.UsersModule.user._id
+      });
+    });
 
     return {
       menu,
-      router
+      router,
+      store,
+      reminders: computed(() => store.state.RemindersModules.reminders)
     };
   },
   methods: {

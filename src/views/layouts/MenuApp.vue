@@ -44,7 +44,7 @@ import {
 import { home, heart, create, bookmark } from "ionicons/icons";
 import { useStore } from "vuex";
 import { UserTypes } from "@/types/UserTypes";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -64,7 +64,9 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
 
-    store.dispatch("relogin");
+    onBeforeMount(async () => {
+      await store.dispatch("relogin");
+    });
 
     return {
       heart,

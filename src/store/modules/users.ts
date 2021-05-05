@@ -4,6 +4,7 @@ import Axios from "@/hook/Axios";
 import UserService from "@/services/UserService";
 // Types
 import { UserTypes } from "@/types/UserTypes";
+import { ReminderTypes } from "@/types/ReminderTypes";
 
 const userService = new UserService();
 
@@ -30,10 +31,18 @@ const actions = {
       return false;
     }
   },
-  async relogin({ commit }: any): Promise<any> {
+  async relogin({ commit, dispatch }: any): Promise<any> {
     const dataUser = await userService.relogin();
 
     commit(UserTypes.SET_DATA, { dataUser });
+
+    dispatch(
+      `${ReminderTypes.GET_REMINDERS}`,
+      { idUser: dataUser._id },
+      {
+        root: true
+      }
+    );
   },
   async [UserTypes.LOGOUT]({ commit }: any): Promise<void> {
     await userService.logout();

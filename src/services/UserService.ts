@@ -43,19 +43,20 @@ export default class UserService {
    * Re login user
    * @return  {User | boolean} user or bolean
    */
-  public async relogin(): Promise<User | boolean> {
-    let dataUser: User | boolean = { email: "" };
+  public async relogin(): Promise<User> {
+    let dataUser: User = { email: "" };
 
     try {
       const { data } = await this.axios.get(`users/verify`);
       const { auth, user } = data;
 
+      localStorage.setItem("idUser", user._id);
+
       if (auth) {
         dataUser = user;
-      } else dataUser = false;
+      }
     } catch ({ response }) {
       this.clearToken();
-      dataUser = false;
     }
 
     return dataUser;
@@ -84,5 +85,6 @@ export default class UserService {
    */
   public clearToken(): void {
     localStorage.removeItem("token");
+    localStorage.removeItem("idUser");
   }
 }
