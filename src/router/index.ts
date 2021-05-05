@@ -3,7 +3,6 @@ import { RouteRecordRaw } from "vue-router";
 
 // Componentes
 import NotFound from "@/views/layouts/NotFound.vue";
-import Login from "@/views/user/Login.vue";
 
 // Services
 import UserService from "@/services/UserService";
@@ -16,20 +15,9 @@ const routes: Array<RouteRecordRaw> = [
     redirect: "/user"
   },
   {
-    path: "/user",
-    component: Login,
-    name: "Login",
-    children: [
-      {
-        path: "",
-        redirect: "/user/login"
-      },
-      {
-        path: "login",
-        name: "Login",
-        component: () => import("@/views/user/Login.vue")
-      }
-    ],
+    path: "/user/login",
+    name: "LoginUser",
+    component: () => import("@/views/user/Login.vue"),
     beforeEnter: async (to, from, next) => {
       if (to.name !== "Reminders" && (await user.verifyToken()))
         next({ name: "Reminders" });
@@ -59,8 +47,8 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (to.name !== "Login" && !(await user.verifyToken()))
-    next({ name: "Login" });
+  if (to.name !== "LoginUser" && !(await user.verifyToken()))
+    next({ name: "LoginUser" });
   else next();
 });
 

@@ -3,9 +3,9 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start" v-if="formCode">
-          <ion-back-button default-href="/login/phone"></ion-back-button>
+          <ion-back-button default-href="/user/login"></ion-back-button>
         </ion-buttons>
-        <ion-title id="titleLogin">Recordatorios</ion-title>
+        <ion-title>Iniciar Sesión</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -31,14 +31,25 @@
           ></ion-input>
         </ion-item>
 
-        <ion-button
-          expand="full"
-          class="ion-margin-top"
-          id="buttonForm"
-          @click="login()"
-        >
-          Iniciar sesión
-        </ion-button>
+        <div class="ion-text-center">
+          <ion-button
+            expand="full"
+            class="ion-margin-top"
+            id="buttonForm"
+            @click="login()"
+          >
+            Iniciar sesión
+          </ion-button>
+          <ion-button
+            color="light"
+            expand="full"
+            class="ion-margin-top"
+            router-animation="/user/register"
+            @click="openFormRegister()"
+          >
+            Registrarse
+          </ion-button>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -58,16 +69,18 @@ import {
   IonLabel,
   IonItem,
   IonButton,
-  toastController
+  toastController,
+  modalController
 } from "@ionic/vue";
 import { arrowBack } from "ionicons/icons";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { UserTypes } from "@/types/UserTypes";
 import { User } from "@/interfaces/User";
+import RegisterUser from "@/views/user/Register.vue";
 
 export default defineComponent({
-  name: "Login",
+  name: "LoginUser",
   components: {
     IonContent,
     IonHeader,
@@ -97,7 +110,8 @@ export default defineComponent({
       router,
       arrowBack,
       formCode: computed(() => route.name === "Code"),
-      store
+      store,
+      id: computed(() => route.params.id)
     };
   },
   methods: {
@@ -121,6 +135,18 @@ export default defineComponent({
 
         this.router.replace(`/reminders`);
       });
+    },
+    async openFormRegister() {
+      const modal = await modalController.create({
+        component: RegisterUser,
+        cssClass: "my-custom-class",
+        componentProps: {
+          title: "New Title"
+        },
+        swipeToClose: true
+      });
+
+      return modal.present();
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({
