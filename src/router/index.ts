@@ -12,7 +12,7 @@ const user = new UserService();
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/user"
+    redirect: "/user/login"
   },
   {
     path: "/user/login",

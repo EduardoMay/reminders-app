@@ -1,5 +1,5 @@
 <template>
-  <ion-list v-if="reminders.length > 0">
+  <ion-list v-if="reminders">
     <ion-item v-for="reminder in reminders" :key="reminder._id">
       <ion-label>
         {{ reminder.title }}

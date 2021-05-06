@@ -87,7 +87,7 @@ export default defineComponent({
 
       await this.store.dispatch(UserTypes.LOGOUT);
 
-      this.router.replace("/user");
+      this.router.replace("/user/login");
     }
   }
 });
