@@ -1,5 +1,6 @@
 import Axios from "@/hook/Axios";
 import { User } from "@/interfaces/User";
+import { AxiosResponse } from "axios";
 
 export default class UserService {
   public axios = new Axios();
@@ -37,6 +38,15 @@ export default class UserService {
    */
   public async login(user: User): Promise<any> {
     return await this.axios.post("users/login", user);
+  }
+
+  /**
+   * Register new user
+   * @param   {User}     user
+   * @return  {*}
+   */
+  public async register(user: User): Promise<AxiosResponse> {
+    return await this.axios.post("users/register", user);
   }
 
   /**

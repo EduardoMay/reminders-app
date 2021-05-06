@@ -78,6 +78,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { User } from "@/interfaces/User";
 import RegisterUser from "@/views/user/Register.vue";
+import { UserTypes } from "@/types/UserTypes";
 
 export default defineComponent({
   name: "RegisterUser",
@@ -115,8 +116,11 @@ export default defineComponent({
     };
   },
   methods: {
-    register() {
+    async register() {
       const emailPatter = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      if (!emailPatter.test(this.email))
+        return this.openToast("Ingresa un correo valido");
 
       if (this.email === "" || this.password === "")
         return this.openToast("Los campos son obligatorios");
@@ -124,15 +128,21 @@ export default defineComponent({
       if (this.password !== this.replyPassword)
         return this.openToast("Las contraseñas no son iguales");
 
-      if (!emailPatter.test(this.email))
-        return this.openToast("Ingresa un correo valido");
-
       const user: User = { email: "" };
 
       user.email = this.email;
       user.password = this.password;
 
-      console.log(true);
+      const res = await this.store.dispatch(UserTypes.REGISTER, { user });
+
+      if (res === "Registered user")
+        return this.openToast("El email que ingresaste ya ha sido registrado");
+
+      if (res === "Data incomplete")
+        return this.openToast("La contraseña de tener mínimo 5 caracteres");
+
+      this.openToast("Te has registrado correctamente");
+      this.dismissModal();
     },
     async dismissModal() {
       await modalController.dismiss({

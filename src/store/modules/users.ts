@@ -48,6 +48,13 @@ const actions = {
     await userService.logout();
 
     commit(UserTypes.LOGOUT);
+  },
+  async [UserTypes.REGISTER]({ commit }: any, { user }: any): Promise<any> {
+    const { data } = await userService.register(user);
+
+    const { message } = data;
+
+    if (message) return message;
   }
 };
 
