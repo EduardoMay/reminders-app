@@ -5,8 +5,9 @@ export default class ReminderService {
   public axios = new Axios();
 
   /**
-   * Save new reminders
-   * @param   {Reminder}  reminder
+   * Guardar recordatorio
+   * @param   {Object<Reminder>}  reminder  Datos del recordatorio
+   * @return  {Promise<boolean | Array<Reminder>} Regresa false si fallo o regresa todos los recordatorios
    */
   public async saveReminder(reminder: Reminder): Promise<boolean | Reminder[]> {
     const { data } = await this.axios.post(
@@ -22,9 +23,9 @@ export default class ReminderService {
   }
 
   /**
-   * Get all reminders by id user
-   * @param   {string}              idUser
-   * @return  {Promise<Reminder>[]}
+   * Obtiene todos los reminders
+   * @param   {String}  idUser  id del recordatorio
+   * @return  {Promise<Reminder[]>} Arreglo de recordatorios
    */
   public async getReminders(idUser: string): Promise<Reminder[]> {
     const { data } = await this.axios.get(`reminders/${idUser}`);

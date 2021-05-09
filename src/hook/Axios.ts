@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 
-/** Use module axios */
+/**
+ * Usar todos los métodos http utilizando la librería de axios
+ */
 export default class Axios {
   readonly URL_API = process.env.VUE_APP_BASE_URL_API;
   public TOKEN = localStorage.token ? localStorage.token : "";
@@ -15,8 +17,8 @@ export default class Axios {
 
   /**
    * Method GET
-   * @param   {string}  endpoint
-   * @param   {object}  params
+   * @param   {String}  endpoint Ruta de la API
+   * @param   {Object}  [params] parámetros de la ruta
    * @returns  {Promise<AxiosResponse>}
    */
   public async get(
@@ -30,8 +32,8 @@ export default class Axios {
 
   /**
    * Method POST
-   * @param   {string}  endpoint
-   * @param   {object}  body
+   * @param   {String}  endpoint Ruta de la API
+   * @param   {Object}  body Datos a enviar
    * @returns   {Promise<AxiosResponse>}
    */
   public async post(endpoint: string, body: object): Promise<AxiosResponse> {
@@ -40,8 +42,8 @@ export default class Axios {
 
   /**
    * Method DELETE
-   * @param   {string}  endpoint
-   * @param   {string}  id
+   * @param   {String}  endpoint Ruta de la API
+   * @param   {Object}  body Datos a enviar
    * @returns  {Promise<AxiosResponse>}
    */
   public async delete(endpoint: string, id: string): Promise<AxiosResponse> {
@@ -50,9 +52,9 @@ export default class Axios {
 
   /**
    * Method PUT
-   * @param {string}  endpoint
-   * @param {string}  id
-   * @param {object}  data
+   * @param   {String}  endpoint Ruta de la API
+   * @param   {String}  id id del datos
+   * @param   {Object}  data datos actualizados
    * @returns  {Promise<AxiosResponse>}
    */
   public async put(
