@@ -37,12 +37,22 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/reminders",
     name: "Reminders",
-    component: () => import("@/views/reminders/Reminders.vue")
+    component: () => import("@/views/reminders/Reminders.vue"),
+    beforeEnter: async (to, from, next) => {
+      if (to.name !== "Reminders" && (await user.verifyToken()))
+        next({ name: "Reminders" });
+      else next();
+    }
   },
   {
     path: "/reminders/new",
     name: "NewReminder",
-    component: () => import("@/views/reminders/NewReminder.vue")
+    component: () => import("@/views/reminders/NewReminder.vue"),
+    beforeEnter: async (to, from, next) => {
+      if (to.name !== "Reminders" && (await user.verifyToken()))
+        next({ name: "Reminders" });
+      else next();
+    }
   },
   {
     path: "/:pathMatch(.*)*",
