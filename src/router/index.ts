@@ -25,6 +25,16 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: "/user/register",
+    name: "RegisterUser",
+    component: () => import("@/views/user/Register.vue"),
+    beforeEnter: async (to, from, next) => {
+      if (to.name !== "Reminders" && (await user.verifyToken()))
+        next({ name: "Reminders" });
+      else next();
+    }
+  },
+  {
     path: "/reminders",
     name: "Reminders",
     component: () => import("@/views/reminders/Reminders.vue")
@@ -44,12 +54,6 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-});
-
-router.beforeEach(async (to, from, next) => {
-  if (to.name !== "LoginUser" && !(await user.verifyToken()))
-    next({ name: "LoginUser" });
-  else next();
 });
 
 export default router;

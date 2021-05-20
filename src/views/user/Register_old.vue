@@ -3,9 +3,11 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/user/login"></ion-back-button>
+          <ion-button slot="icon-only">
+            <ion-icon :icon="arrowBack" slot="icon-only"></ion-icon>
+          </ion-button>
         </ion-buttons>
-        <ion-title>Registro</ion-title>
+        <ion-title>Registrarse</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -41,20 +43,14 @@
           ></ion-input>
         </ion-item>
 
-        <div class="ion-text-center">
-          <ion-button expand="full" class="ion-margin-top" @click="register()">
-            Registrarse
-          </ion-button>
-          <ion-button
-            color="light"
-            expand="full"
-            class="ion-margin-top"
-            id="buttonForm"
-            @click="() => router.push('/user/login')"
-          >
-            Iniciar sesión
-          </ion-button>
-        </div>
+        <ion-button
+          expand="full"
+          class="ion-margin-top"
+          id="buttonForm"
+          @click="register()"
+        >
+          Registrarse
+        </ion-button>
       </div>
     </ion-content>
   </ion-page>
@@ -69,21 +65,21 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons,
-  IonBackButton,
   IonInput,
   IonLabel,
   IonItem,
   IonButton,
-  toastController
+  toastController,
+  IonIcon
 } from "@ionic/vue";
 import { arrowBack } from "ionicons/icons";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { UserTypes } from "@/types/UserTypes";
 import { User } from "@/interfaces/User";
+import { UserTypes } from "@/types/UserTypes";
 
 export default defineComponent({
-  name: "LoginUser",
+  name: "RegisterUser",
   components: {
     IonContent,
     IonHeader,
@@ -91,11 +87,11 @@ export default defineComponent({
     IonTitle,
     IonToolbar,
     IonButtons,
-    IonBackButton,
     IonInput,
     IonLabel,
     IonItem,
-    IonButton
+    IonButton,
+    IonIcon
   },
   data() {
     return {
@@ -110,8 +106,9 @@ export default defineComponent({
     const store = useStore();
 
     return {
-      router,
       arrowBack,
+      router,
+      formCode: computed(() => route.name === "Code"),
       store,
       id: computed(() => route.params.id)
     };
@@ -143,8 +140,6 @@ export default defineComponent({
         return this.openToast("La contraseña de tener mínimo 5 caracteres");
 
       this.openToast("Te has registrado correctamente");
-
-      this.router.push("/user/login");
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({

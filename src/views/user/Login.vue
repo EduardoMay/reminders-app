@@ -44,8 +44,7 @@
             color="light"
             expand="full"
             class="ion-margin-top"
-            router-animation="/user/register"
-            @click="openFormRegister()"
+            @click="() => router.push('/user/register')"
           >
             Registrarse
           </ion-button>
@@ -69,15 +68,13 @@ import {
   IonLabel,
   IonItem,
   IonButton,
-  toastController,
-  modalController
+  toastController
 } from "@ionic/vue";
 import { arrowBack } from "ionicons/icons";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { UserTypes } from "@/types/UserTypes";
 import { User } from "@/interfaces/User";
-import RegisterUser from "@/views/user/Register.vue";
 
 export default defineComponent({
   name: "LoginUser",
@@ -135,18 +132,6 @@ export default defineComponent({
 
         this.router.replace(`/reminders`);
       });
-    },
-    async openFormRegister() {
-      const modal = await modalController.create({
-        component: RegisterUser,
-        cssClass: "my-custom-class",
-        componentProps: {
-          title: "New Title"
-        },
-        swipeToClose: true
-      });
-
-      return modal.present();
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({
