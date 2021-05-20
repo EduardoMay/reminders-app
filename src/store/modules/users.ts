@@ -55,6 +55,14 @@ const actions = {
     const { message } = data;
 
     if (message) return message;
+  },
+  async [UserTypes.PROFILE](
+    { commit }: any,
+    { id }: { id: string }
+  ): Promise<any> {
+    const data = await userService.profile(id);
+
+    console.log(data);
   }
 };
 
