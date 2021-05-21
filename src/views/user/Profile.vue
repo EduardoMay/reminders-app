@@ -18,7 +18,7 @@
         <ion-item>
           <ion-label>
             <h3>Nombre</h3>
-            <p>{{ user.email }}</p>
+            <p>{{ user.name }}</p>
           </ion-label>
         </ion-item>
 
@@ -84,7 +84,8 @@ export default defineComponent({
   async mounted() {
     const { user } = await this.profile({ id: this.getIdUser });
 
-    this.user = user;
+    this.user.email = user.email;
+    this.user.name = user.name ? user.name : "No definido";
   }
 });
 </script>
