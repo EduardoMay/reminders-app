@@ -50,6 +50,19 @@ export default class UserService {
   }
 
   /**
+   * Get data profile
+   *
+   * @param   {string}      id id of the user
+   *
+   * @return  {Promise<any>}
+   */
+  public async profile(id: string): Promise<any> {
+    const { data } = await this.axios.get(`users/user/${id}`);
+
+    return data;
+  }
+
+  /**
    * Re login user
    * @return  {User | boolean} user or bolean
    */

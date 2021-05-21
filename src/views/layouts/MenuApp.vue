@@ -21,6 +21,17 @@
         </ion-item>
       </ion-list>
 
+      <ion-item
+        button
+        @click="
+          () => {
+            openEnd();
+            router.push('/user/profile');
+          }
+        "
+      >
+        <ion-label>Perfil</ion-label>
+      </ion-item>
       <ion-item button @click="logout()">
         <ion-label>Cerrar sesión</ion-label>
       </ion-item>
