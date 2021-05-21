@@ -22,6 +22,7 @@ const actions = {
         commit(UserTypes.SET_DATA, { dataUser });
 
         userService.setToken(token);
+        localStorage.setItem("idUser", dataUser._id);
 
         new Axios();
       }
@@ -62,7 +63,7 @@ const actions = {
   ): Promise<any> {
     const data = await userService.profile(id);
 
-    console.log(data);
+    return data;
   }
 };
 
@@ -78,7 +79,11 @@ const mutations = {
   }
 };
 
-const getters = {};
+const getters = {
+  getIdUser() {
+    return localStorage.idUser;
+  }
+};
 
 export const UsersModule = {
   namespace: true,

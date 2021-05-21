@@ -8,21 +8,47 @@
         <ion-title>Perfil</ion-title>
       </ion-toolbar>
     </ion-header>
+
+    <ion-content>
+      <ion-list>
+        <ion-list-header>
+          Información
+        </ion-list-header>
+
+        <ion-item>
+          <ion-label>
+            <h3>Nombre</h3>
+            <p>{{ user.email }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>Correo</h3>
+            <p>{{ user.email }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import {
   IonPage,
   IonHeader,
   IonToolbar,
   IonButtons,
   IonBackButton,
-  IonTitle
+  IonTitle,
+  IonContent,
+  IonList,
+  IonListHeader,
+  IonItem,
+  IonLabel
 } from "@ionic/vue";
-import { useStore } from "vuex";
-import { UserTypes } from "@/types/UserTypes";
+import { mapActions, mapGetters, useStore } from "vuex";
 
 export default defineComponent({
   name: "Profile",
@@ -32,16 +58,33 @@ export default defineComponent({
     IonToolbar,
     IonButtons,
     IonBackButton,
-    IonTitle
+    IonTitle,
+    IonContent,
+    IonList,
+    IonListHeader,
+    IonItem,
+    IonLabel
+  },
+  data() {
+    return {
+      user: { email: "", name: "No definido" }
+    };
   },
   setup() {
     const store = useStore();
-    const user = computed(() => store.state.UsersModule.user);
-    console.log(store.state.UsersModule.user);
-    // store.dispatch(UserTypes.PROFILE, { id: user.id });
 
-    console.log("Perfil");
-    return {};
+    return { store };
+  },
+  methods: {
+    ...mapActions(["profile"])
+  },
+  computed: {
+    ...mapGetters(["getIdUser"])
+  },
+  async mounted() {
+    const { user } = await this.profile({ id: this.getIdUser });
+
+    this.user = user;
   }
 });
 </script>
