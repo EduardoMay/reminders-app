@@ -5,6 +5,7 @@ import UserService from "@/services/UserService";
 // Types
 import { UserTypes } from "@/types/UserTypes";
 import { ReminderTypes } from "@/types/ReminderTypes";
+import { User } from "@/interfaces/User";
 
 const userService = new UserService();
 
@@ -15,19 +16,27 @@ const state = () => ({
 const actions = {
   async loginUser({ commit }: any, { user }: any): Promise<any> {
     try {
-      const { data } = await userService.login(user);
-      const { user: dataUser, auth, token } = data;
+      const {
+        token,
+        dataUser,
+        status
+      }: {
+        token: string;
+        dataUser: User;
+        status: boolean;
+      } = await userService.login(user);
 
-      if (auth) {
-        commit(UserTypes.SET_DATA, { dataUser });
+      if (!status) return false;
 
-        userService.setToken(token);
-        localStorage.setItem("idUser", dataUser._id);
+      commit(UserTypes.SET_DATA, { dataUser });
 
-        new Axios();
-      }
+      userService.setToken(token);
 
-      return auth;
+      localStorage.setItem("idUser", String(dataUser._id));
+
+      new Axios();
+
+      return true;
     } catch ({ response }) {
       return false;
     }

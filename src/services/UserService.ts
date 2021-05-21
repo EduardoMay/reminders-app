@@ -37,7 +37,16 @@ export default class UserService {
    * @return  {*}
    */
   public async login(user: User): Promise<any> {
-    return await this.axios.post("users/login", user);
+    const { data } = await this.axios.post("users/login", user);
+    const { error, auth, token, user: dataUser } = data;
+
+    let response = { token: "", dataUser: "", status: false };
+
+    if (error && !auth) return response;
+
+    response = { token, dataUser, status: true };
+
+    return response;
   }
 
   /**
