@@ -39,8 +39,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "Reminders",
     component: () => import("@/views/reminders/Reminders.vue"),
     beforeEnter: async (to, from, next) => {
-      if (to.name !== "Reminders" && (await user.verifyToken()))
-        next({ name: "Reminders" });
+      if (to.name !== "LoginUser" && !(await user.verifyToken()))
+        next({ name: "LoginUser" });
       else next();
     }
   },
@@ -49,8 +49,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "NewReminder",
     component: () => import("@/views/reminders/NewReminder.vue"),
     beforeEnter: async (to, from, next) => {
-      if (to.name !== "Reminders" && (await user.verifyToken()))
-        next({ name: "Reminders" });
+      if (to.name !== "LoginUser" && !(await user.verifyToken()))
+        next({ name: "LoginUser" });
       else next();
     }
   },
