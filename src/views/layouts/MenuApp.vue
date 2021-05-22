@@ -26,6 +26,18 @@
         @click="
           () => {
             openEnd();
+            router.push('/priorities/list');
+          }
+        "
+      >
+        <ion-label>Prioridades</ion-label>
+      </ion-item>
+
+      <ion-item
+        button
+        @click="
+          () => {
+            openEnd();
             router.push('/user/profile');
           }
         "
