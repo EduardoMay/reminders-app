@@ -1,29 +1,40 @@
+// Interfaces
+import { Reminder } from "@/interfaces/Reminder";
 // Services
 import ReminderService from "@/services/ReminderService";
-
 // Types
 import { ReminderTypes } from "@/types/ReminderTypes";
+// Store
+import { Commit } from "vuex";
 
 const reminderService = new ReminderService();
 
-const state = () => ({
+interface StateReminder {
+  reminders: Reminder[];
+  idUser: string;
+}
+
+const state = (): StateReminder => ({
   reminders: [],
   idUser: ""
 });
 
 const actions = {
-  async [ReminderTypes.SAVE_REMINDER]({ commit }: any, { newReminder }: any) {
+  async [ReminderTypes.SAVE_REMINDER](
+    { commit }: { commit: Commit },
+    { newReminder }: { newReminder: Reminder }
+  ) {
     const reminders = await reminderService.saveReminder(newReminder);
 
     if (!reminders) return false;
 
-    commit(ReminderTypes.SAVE_REMINDER, { reminders });
+    commit(ReminderTypes.SAVE_REMINDER, reminders);
 
     return true;
   },
   async [ReminderTypes.GET_REMINDERS](
-    { commit }: any,
-    { idUser }: any
+    { commit }: { commit: Commit },
+    { idUser }: { idUser: string }
   ): Promise<void> {
     const reminders = await reminderService.getReminders(idUser);
 
@@ -32,10 +43,13 @@ const actions = {
 };
 
 const mutations = {
-  [ReminderTypes.SAVE_REMINDER](state: any, { reminders }: any) {
+  [ReminderTypes.SAVE_REMINDER](state: StateReminder, reminders: Reminder[]) {
     state.reminders = reminders;
   },
-  async [ReminderTypes.GET_REMINDERS](state: any, reminders: any) {
+  async [ReminderTypes.GET_REMINDERS](
+    state: StateReminder,
+    reminders: Reminder[]
+  ) {
     state.reminders = reminders;
   }
 };
