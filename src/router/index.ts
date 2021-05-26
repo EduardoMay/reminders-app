@@ -75,6 +75,16 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: "/priorities/create",
+    name: "CreatePriority",
+    component: () => import("@/views/priorities/FormPriority.vue"),
+    beforeEnter: async (to, from, next) => {
+      if (to.name !== "LoginUser" && !(await user.verifyToken()))
+        next({ name: "LoginUser" });
+      else next();
+    }
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "404",
     component: NotFound
