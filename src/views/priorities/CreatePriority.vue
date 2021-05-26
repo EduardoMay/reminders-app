@@ -9,8 +9,8 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content fullscreen>
-      <span>Formulario</span>
+    <ion-content :fullscreen="true" class="ion-padding">
+      <form-priority></form-priority>
     </ion-content>
   </ion-page>
 </template>
@@ -27,6 +27,7 @@ import {
   IonContent
 } from "@ionic/vue";
 import { useRouter } from "vue-router";
+import FormPriority from "@/components/priorities/FormPriority.vue";
 
 export default defineComponent({
   name: "CreatePriority",
@@ -37,7 +38,8 @@ export default defineComponent({
     IonButtons,
     IonBackButton,
     IonTitle,
-    IonContent
+    IonContent,
+    FormPriority
   },
   setup() {
     const router = useRouter();
