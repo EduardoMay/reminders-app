@@ -24,12 +24,15 @@ export class PrioritiesService {
    * Save priority
    * @param {object} priority
    */
-  public async savePriority(priority: Priority): Promise<any> {
-    const { data } = await this.axios.post(
-      `/priorities/${priority.idUser}`,
-      priority
-    );
+  public async savePriority(
+    priority: { data: Priority },
+    idUser: string
+  ): Promise<{ message: string; error: boolean }> {
+    const { data } = await this.axios.post(`priorities/${idUser}`, priority);
 
-    console.log(data);
+    if (data.error)
+      return { message: "Ocurrió un error vuelve a intentar", error: true };
+
+    return { message: "Se guardo correctamente", error: false };
   }
 }

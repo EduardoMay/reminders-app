@@ -1,5 +1,6 @@
 // Interfaces
 import { Priority } from "@/interfaces/Priority";
+import { User } from "@/interfaces/User";
 // Service
 import { PrioritiesService } from "@/services/PrioritiesService";
 // Types
@@ -11,6 +12,7 @@ const priorityService = new PrioritiesService();
 
 interface ParametersActions {
   commit: Commit;
+  rootState: any;
 }
 
 interface StatePriority {
@@ -30,10 +32,16 @@ const actions = {
     commit(PrioritiesTypes.SET_DATA, priorities);
   },
   async [PrioritiesTypes.SAVE_REMINDERS](
-    { commit }: ParametersActions,
+    { rootState }: ParametersActions,
     priority: Priority
   ) {
-    console.log(priority);
+    const { _id }: User = rootState.UsersModule.user;
+    priority.id_user = String(_id);
+    const data = { data: priority };
+
+    const res = await priorityService.savePriority(data, priority.id_user);
+
+    return res;
   }
 };
 
