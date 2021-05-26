@@ -28,6 +28,12 @@ const actions = {
     const priorities: Priority[] = await priorityService.getPriorities(idUser);
 
     commit(PrioritiesTypes.SET_DATA, priorities);
+  },
+  async [PrioritiesTypes.SAVE_REMINDERS](
+    { commit }: ParametersActions,
+    priority: Priority
+  ) {
+    console.log(priority);
   }
 };
 
