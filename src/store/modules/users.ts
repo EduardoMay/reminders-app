@@ -32,22 +32,16 @@ const actions = {
   ): Promise<boolean> {
     try {
       const {
-        token,
-        dataUser,
-        status
+        status,
+        dataUser
       }: {
-        token: string;
-        dataUser: User;
         status: boolean;
+        dataUser?: User;
       } = await userService.login(user);
 
       if (!status) return false;
 
       commit(UserTypes.SET_DATA, dataUser);
-
-      userService.setToken(token);
-
-      localStorage.setItem("idUser", String(dataUser._id));
 
       new Axios();
 
@@ -57,13 +51,17 @@ const actions = {
     }
   },
   async relogin({ commit, dispatch }: ParametersActions): Promise<void> {
-    const dataUser = await userService.relogin();
+    const {
+      user,
+      status
+    }: { user: User; status: boolean } = await userService.relogin();
+    // TODO verificar el status al hacer relogin
 
-    commit(UserTypes.SET_DATA, dataUser);
+    commit(UserTypes.SET_DATA, user);
 
     dispatch(
       `${ReminderTypes.GET_REMINDERS}`,
-      { idUser: dataUser._id },
+      { idUser: user._id },
       {
         root: true
       }
@@ -76,18 +74,13 @@ const actions = {
   },
   async [UserTypes.REGISTER](
     _: ParametersActions,
-    { user }: { user: User }
+    user: User
   ): Promise<string> {
-    const { data } = await userService.register(user);
-
-    const { message } = data;
+    const message = await userService.register(user);
 
     return message;
   },
-  async [UserTypes.PROFILE](
-    _: ParametersActions,
-    { id }: { id: string }
-  ): Promise<any> {
+  async [UserTypes.PROFILE](_: ParametersActions, id: string): Promise<any> {
     const data = await userService.profile(id);
 
     return data;

@@ -134,12 +134,12 @@ export default defineComponent({
       user.email = this.email;
       user.password = this.password;
 
-      const res = await this.store.dispatch(UserTypes.REGISTER, { user });
+      const message = await this.store.dispatch(UserTypes.REGISTER, user);
 
-      if (res === "Registered user")
+      if (message === "Registered user")
         return this.openToast("El email que ingresaste ya ha sido registrado");
 
-      if (res === "Data incomplete")
+      if (message === "Data incomplete")
         return this.openToast("La contraseña de tener mínimo 5 caracteres");
 
       this.openToast("Te has registrado correctamente");

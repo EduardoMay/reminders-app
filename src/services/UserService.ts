@@ -34,25 +34,29 @@ export default class UserService {
    * @param user
    * @return  {*}
    */
-  public async login(user: User): Promise<any> {
+  public async login(
+    user: User
+  ): Promise<{ status: boolean; dataUser?: User }> {
     const { data } = await this.axios.post("users/login", user);
     const { error, auth, token, user: dataUser } = data;
 
-    let response = { token: "", dataUser: "", status: false };
+    if (error && !auth) return { status: false };
 
-    if (error && !auth) return response;
+    this.setToken(token);
+    this.setIdUser(dataUser._id);
 
-    response = { token, dataUser, status: true };
-
-    return response;
+    return { dataUser, status: true };
   }
 
   /**
    * Register new user
    * @param user
    */
-  public async register(user: User): Promise<AxiosResponse> {
-    return await this.axios.post("users/register", user);
+  public async register(user: User): Promise<string> {
+    const { data } = await this.axios.post("users/register", user);
+    const { message } = data;
+
+    return message;
   }
 
   /**
@@ -70,20 +74,22 @@ export default class UserService {
    * Re login user
    * @return  {*}
    */
-  public async relogin(): Promise<User> {
-    let dataUser: User = { email: "" };
+  public async relogin(): Promise<{ user: User; status: boolean }> {
+    const dataUser: { user: User; status: boolean } = {
+      user: {},
+      status: false
+    };
 
     try {
       const { data } = await this.axios.get(`users/verify`);
-      const { auth, user } = data;
+      const { auth, user }: { auth: boolean; user: User } = data;
 
-      localStorage.setItem("idUser", user._id);
+      localStorage.setItem("idUser", String(user._id));
 
-      if (auth) {
-        dataUser = user;
-      }
+      if (auth) dataUser.user = user;
     } catch ({ response }) {
       this.clearToken();
+      dataUser.status = true;
     }
 
     return dataUser;
@@ -104,6 +110,14 @@ export default class UserService {
    */
   public setToken(token: string): void {
     localStorage.setItem("token", token);
+  }
+
+  /**
+   * Set id user in localStorage
+   * @param id string
+   */
+  public setIdUser(id: string): void {
+    localStorage.setItem("idUser", id);
   }
 
   /**

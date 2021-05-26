@@ -49,6 +49,7 @@ import {
   IonLabel
 } from "@ionic/vue";
 import { mapActions, mapGetters, useStore } from "vuex";
+import { User } from "@/interfaces/User";
 
 export default defineComponent({
   name: "Profile",
@@ -82,9 +83,9 @@ export default defineComponent({
     ...mapGetters(["getIdUser"])
   },
   async mounted() {
-    const { user } = await this.profile({ id: this.getIdUser });
+    const { user }: { user: User } = await this.profile(this.getIdUser);
 
-    this.user.email = user.email;
+    this.user.email = String(user.email);
     this.user.name = user.name ? user.name : "No definido";
   }
 });
