@@ -5,16 +5,31 @@ import UserService from "@/services/UserService";
 // Types
 import { UserTypes } from "@/types/UserTypes";
 import { ReminderTypes } from "@/types/ReminderTypes";
+// Interfaces
 import { User } from "@/interfaces/User";
+// Vuex
+import { Commit, Dispatch } from "vuex";
 
 const userService = new UserService();
 
-const state = () => ({
-  user: {}
+interface ParametersActions {
+  commit: Commit;
+  dispatch: Dispatch;
+}
+
+interface StateUser {
+  user: User;
+}
+
+const state = (): StateUser => ({
+  user: { email: "" }
 });
 
 const actions = {
-  async loginUser({ commit }: any, { user }: any): Promise<any> {
+  async loginUser(
+    { commit }: ParametersActions,
+    { user }: { user: User }
+  ): Promise<boolean> {
     try {
       const {
         token,
@@ -28,7 +43,7 @@ const actions = {
 
       if (!status) return false;
 
-      commit(UserTypes.SET_DATA, { dataUser });
+      commit(UserTypes.SET_DATA, dataUser);
 
       userService.setToken(token);
 
@@ -41,10 +56,10 @@ const actions = {
       return false;
     }
   },
-  async relogin({ commit, dispatch }: any): Promise<any> {
+  async relogin({ commit, dispatch }: ParametersActions): Promise<void> {
     const dataUser = await userService.relogin();
 
-    commit(UserTypes.SET_DATA, { dataUser });
+    commit(UserTypes.SET_DATA, dataUser);
 
     dispatch(
       `${ReminderTypes.GET_REMINDERS}`,
@@ -54,20 +69,23 @@ const actions = {
       }
     );
   },
-  async [UserTypes.LOGOUT]({ commit }: any): Promise<void> {
+  async [UserTypes.LOGOUT]({ commit }: ParametersActions): Promise<void> {
     await userService.logout();
 
     commit(UserTypes.LOGOUT);
   },
-  async [UserTypes.REGISTER]({ commit }: any, { user }: any): Promise<any> {
+  async [UserTypes.REGISTER](
+    _: ParametersActions,
+    { user }: { user: User }
+  ): Promise<string> {
     const { data } = await userService.register(user);
 
     const { message } = data;
 
-    if (message) return message;
+    return message;
   },
   async [UserTypes.PROFILE](
-    { commit }: any,
+    _: ParametersActions,
     { id }: { id: string }
   ): Promise<any> {
     const data = await userService.profile(id);
@@ -77,19 +95,16 @@ const actions = {
 };
 
 const mutations = {
-  async [UserTypes.SET_DATA](state: any, { dataUser }: any) {
-    delete dataUser.createdAt;
-    delete dataUser.updatedAt;
-
+  async [UserTypes.SET_DATA](state: StateUser, dataUser: User) {
     state.user = dataUser;
   },
-  async [UserTypes.LOGOUT](state: any) {
-    state.user = {};
+  async [UserTypes.LOGOUT](state: StateUser) {
+    state.user = { email: "" };
   }
 };
 
 const getters = {
-  getIdUser() {
+  getIdUser(): string {
     return localStorage.idUser;
   }
 };

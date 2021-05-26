@@ -7,8 +7,7 @@ export default class UserService {
   readonly BASE_URL_API = process.env.VUE_APP_BASE_URL_API;
 
   /**
-   * Verify token
-   * @return  {Promise<boolean>}
+   * verify token
    */
   public async verifyToken(): Promise<boolean> {
     let status = false;
@@ -32,8 +31,7 @@ export default class UserService {
 
   /**
    * Login user
-   * @param   {string}  email
-   * @param   {string}  password
+   * @param user
    * @return  {*}
    */
   public async login(user: User): Promise<any> {
@@ -51,19 +49,16 @@ export default class UserService {
 
   /**
    * Register new user
-   * @param   {User}     user
-   * @return  {*}
+   * @param user
    */
   public async register(user: User): Promise<AxiosResponse> {
     return await this.axios.post("users/register", user);
   }
 
   /**
-   * Get data profile
-   *
-   * @param   {string}      id id of the user
-   *
-   * @return  {Promise<any>}
+   * get data profile
+   * @param id
+   * @return {*}
    */
   public async profile(id: string): Promise<any> {
     const { data } = await this.axios.get(`users/user/${id}`);
@@ -73,7 +68,7 @@ export default class UserService {
 
   /**
    * Re login user
-   * @return  {User | boolean} user or bolean
+   * @return  {*}
    */
   public async relogin(): Promise<User> {
     let dataUser: User = { email: "" };
@@ -96,7 +91,6 @@ export default class UserService {
 
   /**
    * Logout user
-   * @return  {*}
    */
   public async logout(): Promise<void> {
     await this.axios.get(`users/logout`);
@@ -105,8 +99,8 @@ export default class UserService {
   }
 
   /**
-   * Set token with response of login is true
-   * @param   {string}  token
+   * Set token
+   * @param token
    */
   public setToken(token: string): void {
     localStorage.setItem("token", token);

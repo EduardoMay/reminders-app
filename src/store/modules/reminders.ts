@@ -9,6 +9,10 @@ import { Commit } from "vuex";
 
 const reminderService = new ReminderService();
 
+interface ParametersActions {
+  commit: Commit;
+}
+
 interface StateReminder {
   reminders: Reminder[];
   idUser: string;
@@ -21,7 +25,7 @@ const state = (): StateReminder => ({
 
 const actions = {
   async [ReminderTypes.SAVE_REMINDER](
-    { commit }: { commit: Commit },
+    { commit }: ParametersActions,
     { newReminder }: { newReminder: Reminder }
   ) {
     const reminders = await reminderService.saveReminder(newReminder);
@@ -33,7 +37,7 @@ const actions = {
     return true;
   },
   async [ReminderTypes.GET_REMINDERS](
-    { commit }: { commit: Commit },
+    { commit }: ParametersActions,
     { idUser }: { idUser: string }
   ): Promise<void> {
     const reminders = await reminderService.getReminders(idUser);
