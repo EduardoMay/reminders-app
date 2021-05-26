@@ -19,4 +19,17 @@ export class PrioritiesService {
 
     return priorities;
   }
+
+  /**
+   * Save priority
+   * @param {object} priority
+   */
+  public async savePriority(priority: Priority): Promise<any> {
+    const { data } = await this.axios.post(
+      `/priorities/${priority.idUser}`,
+      priority
+    );
+
+    console.log(data);
+  }
 }
