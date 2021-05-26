@@ -29,7 +29,7 @@ import {
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: "FormPriority",
+  name: "CreatePriority",
   components: {
     IonPage,
     IonHeader,
