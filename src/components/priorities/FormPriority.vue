@@ -7,7 +7,12 @@
 
     <ion-item class="ion-margin-top">
       <ion-label>Color</ion-label>
-      <ion-input id="color" type="color" v-model="color"></ion-input>
+      <ion-input
+        id="color"
+        type="color"
+        v-model="color"
+        :value="color"
+      ></ion-input>
     </ion-item>
 
     <ion-button
@@ -32,7 +37,7 @@ import {
 import { menu } from "ionicons/icons";
 import { useStore } from "vuex";
 import { defineComponent } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { Priority } from "@/interfaces/Priority";
 import { PrioritiesTypes } from "@/types/PrioritiesTypes";
 
@@ -41,12 +46,15 @@ export default defineComponent({
   components: { IonItem, IonLabel, IonInput, IonButton },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const store = useStore();
+    const nameRoute = route.name;
 
     return {
       menu,
       router,
-      store
+      store,
+      nameRoute
     };
   },
   data() {
@@ -66,14 +74,20 @@ export default defineComponent({
         color: this.color
       };
 
-      const { message, error } = await this.store.dispatch(
-        PrioritiesTypes.SAVE_REMINDERS,
-        priority
-      );
+      if (this.nameRoute === "EditPriority") {
+        console.log("Editar Priority");
 
-      this.openToast(message);
+        return;
+      } else {
+        const { message, error } = await this.store.dispatch(
+          PrioritiesTypes.SAVE_REMINDERS,
+          priority
+        );
 
-      if (!error) this.router.push("list");
+        this.openToast(message);
+
+        if (!error) this.router.push("list");
+      }
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({

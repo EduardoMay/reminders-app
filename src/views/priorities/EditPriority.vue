@@ -9,8 +9,8 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
-      <span>Formulario</span>
+    <ion-content class="ion-padding">
+      <form-priority></form-priority>
     </ion-content>
   </ion-page>
 </template>
@@ -26,6 +26,7 @@ import {
   IonTitle,
   IonContent
 } from "@ionic/vue";
+import FormPriority from "@/components/priorities/FormPriority.vue";
 
 export default defineComponent({
   name: "EditPriority",
@@ -36,7 +37,8 @@ export default defineComponent({
     IonButtons,
     IonBackButton,
     IonTitle,
-    IonContent
+    IonContent,
+    FormPriority
   }
 });
 </script>
