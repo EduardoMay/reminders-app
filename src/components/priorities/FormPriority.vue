@@ -36,7 +36,7 @@ import {
 } from "@ionic/vue";
 import { menu } from "ionicons/icons";
 import { useStore } from "vuex";
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Priority } from "@/interfaces/Priority";
 import { PrioritiesTypes } from "@/types/PrioritiesTypes";
@@ -49,18 +49,20 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const nameRoute = route.name;
+    const { value } = computed(() => store.getters.getPriority);
+    const { id_user, title, color, _id } = value;
+
+    if (value.title === "") router.push("list");
 
     return {
       menu,
       router,
       store,
-      nameRoute
-    };
-  },
-  data() {
-    return {
-      title: "",
-      color: ""
+      nameRoute,
+      id: _id,
+      id_user,
+      title,
+      color
     };
   },
   methods: {
@@ -75,7 +77,12 @@ export default defineComponent({
       };
 
       if (this.nameRoute === "EditPriority") {
-        console.log("Editar Priority");
+        priority._id = this.id;
+        priority.id_user = this.id_user;
+
+        // TODO Validar que sea haya editado la Priority
+
+        this.store.dispatch(PrioritiesTypes.SAVE_REMINDERS, priority);
 
         return;
       } else {

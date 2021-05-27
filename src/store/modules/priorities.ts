@@ -17,10 +17,12 @@ interface ParametersActions {
 
 interface StatePriority {
   priorities: Priority[];
+  prioritySelected: Priority;
 }
 
 const state = (): StatePriority => ({
-  priorities: []
+  priorities: [],
+  prioritySelected: { id_user: "", title: "", color: "" }
 });
 
 const actions = {
@@ -42,6 +44,13 @@ const actions = {
     const res = await priorityService.savePriority(data, priority.id_user);
 
     return res;
+  },
+  async [PrioritiesTypes.SAVE_REMINDERS](
+    _: ParametersActions,
+    priority: Priority
+  ) {
+    console.log(priority);
+    // TODO Llamar al servicio para guardar el Priority editado
   }
 };
 
@@ -51,10 +60,17 @@ const mutations = {
     priorities: Priority[]
   ): void {
     state.priorities = priorities;
+  },
+  [PrioritiesTypes.SET_PRIORITY](state: StatePriority, priority: Priority) {
+    state.prioritySelected = priority;
   }
 };
 
-const getters = {};
+const getters = {
+  [PrioritiesTypes.GET_PRIORITY](state: StatePriority) {
+    return state.prioritySelected;
+  }
+};
 
 export const PrioritiesModule = {
   namespace: true,
