@@ -57,13 +57,17 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const nameRoute = route.name;
-    const { value: priorityBuffer }: { value: Priority } = computed(
+    let { value: priorityBuffer }: { value: Priority } = computed(
       () => store.getters.getPriority
     );
 
+    if (nameRoute === "CreatePriority")
+      priorityBuffer = { title: "", color: "", id_user: "" };
+
     const { id_user, title, color, _id } = priorityBuffer;
 
-    if (priorityBuffer.title === "") router.replace("list");
+    if (priorityBuffer.title === "" && nameRoute === "EditPriority")
+      router.replace("list");
 
     return {
       menu,
@@ -116,6 +120,7 @@ export default defineComponent({
           return this.openToast("Ha ocurrido un error vuelva a intentarlo");
 
         this.openToast("Se guardo correctamente");
+        this.setPriority({});
         this.router.replace("list");
       } else {
         const { message, error } = await this.store.dispatch(
@@ -125,8 +130,10 @@ export default defineComponent({
 
         this.openToast(message);
 
-        if (!error) this.router.push("list");
+        if (!error) this.router.replace("list");
       }
+
+      this.store.dispatch(PrioritiesTypes.GET_PRIORITIES);
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({
