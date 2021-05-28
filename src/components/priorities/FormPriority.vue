@@ -23,6 +23,14 @@
     >
       Guardar
     </ion-button>
+    <ion-button
+      color="medium"
+      expand="full"
+      class="ion-margin-top"
+      @click="() => router.replace('list')"
+    >
+      Cancelar
+    </ion-button>
   </form>
 </template>
 
@@ -35,10 +43,10 @@ import {
   toastController
 } from "@ionic/vue";
 import { menu } from "ionicons/icons";
-import { useStore } from "vuex";
+import { mapMutations, useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Priority } from "@/interfaces/Priority";
+import { DataPriority, Priority } from "@/interfaces/Priority";
 import { PrioritiesTypes } from "@/types/PrioritiesTypes";
 
 export default defineComponent({
@@ -49,16 +57,20 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const nameRoute = route.name;
-    const { value } = computed(() => store.getters.getPriority);
-    const { id_user, title, color, _id } = value;
+    const { value: priorityBuffer }: { value: Priority } = computed(
+      () => store.getters.getPriority
+    );
 
-    if (value.title === "") router.push("list");
+    const { id_user, title, color, _id } = priorityBuffer;
+
+    if (priorityBuffer.title === "") router.replace("list");
 
     return {
       menu,
       router,
       store,
       nameRoute,
+      priorityBuffer,
       id: _id,
       id_user,
       title,
@@ -66,6 +78,7 @@ export default defineComponent({
     };
   },
   methods: {
+    ...mapMutations(["setPriority"]),
     async createPriority() {
       if (this.title === "") return this.openToast("Llena el campo titulo");
       if (this.color === "") return this.openToast("Selecciona un color");
@@ -80,11 +93,30 @@ export default defineComponent({
         priority._id = this.id;
         priority.id_user = this.id_user;
 
-        // TODO Validar que sea haya editado la Priority
+        if (
+          this.priorityBuffer.title === priority.title &&
+          this.priorityBuffer.color === priority.color
+        ) {
+          this.router.replace("list");
+          this.setPriority({});
+          this.openToast("Se guardo correctamente");
+          return;
+        }
 
-        this.store.dispatch(PrioritiesTypes.SAVE_REMINDERS, priority);
+        const dataPriority: DataPriority = {
+          data: priority
+        };
 
-        return;
+        const error = await this.store.dispatch(
+          PrioritiesTypes.UPDATE_PRIORITY,
+          dataPriority
+        );
+
+        if (error)
+          return this.openToast("Ha ocurrido un error vuelva a intentarlo");
+
+        this.openToast("Se guardo correctamente");
+        this.router.replace("list");
       } else {
         const { message, error } = await this.store.dispatch(
           PrioritiesTypes.SAVE_REMINDERS,

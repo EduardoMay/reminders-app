@@ -1,5 +1,5 @@
 // Interfaces
-import { Priority } from "@/interfaces/Priority";
+import { DataPriority, Priority } from "@/interfaces/Priority";
 import { User } from "@/interfaces/User";
 // Service
 import { PrioritiesService } from "@/services/PrioritiesService";
@@ -45,12 +45,11 @@ const actions = {
 
     return res;
   },
-  async [PrioritiesTypes.SAVE_REMINDERS](
+  async [PrioritiesTypes.UPDATE_PRIORITY](
     _: ParametersActions,
-    priority: Priority
+    dataPriority: DataPriority
   ) {
-    console.log(priority);
-    // TODO Llamar al servicio para guardar el Priority editado
+    return await priorityService.updatePriority(dataPriority);
   }
 };
 

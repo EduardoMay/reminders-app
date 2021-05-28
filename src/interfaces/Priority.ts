@@ -4,3 +4,7 @@ export interface Priority {
   title: string;
   color: string;
 }
+
+export interface DataPriority {
+  data: Priority;
+}
