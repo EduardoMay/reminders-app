@@ -8,7 +8,7 @@
         :icon="create"
         color="medium"
         slot="end"
-        @click="() => router.push('edit')"
+        @click="() => editPriority(priority)"
       />
     </ion-item>
   </ion-list>
@@ -17,9 +17,10 @@
 <script lang="ts">
 import { IonList, IonItem, IonLabel, IonIcon } from "@ionic/vue";
 import { menu, create } from "ionicons/icons";
-import { useStore } from "vuex";
+import { mapMutations, useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
+import { Priority } from "@/interfaces/Priority";
 
 export default defineComponent({
   name: "ListPriorities",
@@ -40,6 +41,13 @@ export default defineComponent({
       store,
       priorities: computed(() => store.state.PrioritiesModule.priorities)
     };
+  },
+  methods: {
+    ...mapMutations(["setPriority"]),
+    editPriority(priority: Priority): void {
+      this.setPriority(priority);
+      this.router.push("edit");
+    }
   }
 });
 </script>

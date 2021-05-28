@@ -1,5 +1,5 @@
 // Interfaces
-import { Priority } from "@/interfaces/Priority";
+import { DataPriority, Priority } from "@/interfaces/Priority";
 import { User } from "@/interfaces/User";
 // Service
 import { PrioritiesService } from "@/services/PrioritiesService";
@@ -17,10 +17,12 @@ interface ParametersActions {
 
 interface StatePriority {
   priorities: Priority[];
+  prioritySelected: Priority;
 }
 
 const state = (): StatePriority => ({
-  priorities: []
+  priorities: [],
+  prioritySelected: { id_user: "", title: "", color: "" }
 });
 
 const actions = {
@@ -42,6 +44,12 @@ const actions = {
     const res = await priorityService.savePriority(data, priority.id_user);
 
     return res;
+  },
+  async [PrioritiesTypes.UPDATE_PRIORITY](
+    _: ParametersActions,
+    dataPriority: DataPriority
+  ) {
+    return await priorityService.updatePriority(dataPriority);
   }
 };
 
@@ -51,10 +59,17 @@ const mutations = {
     priorities: Priority[]
   ): void {
     state.priorities = priorities;
+  },
+  [PrioritiesTypes.SET_PRIORITY](state: StatePriority, priority: Priority) {
+    state.prioritySelected = priority;
   }
 };
 
-const getters = {};
+const getters = {
+  [PrioritiesTypes.GET_PRIORITY](state: StatePriority) {
+    return state.prioritySelected;
+  }
+};
 
 export const PrioritiesModule = {
   namespace: true,

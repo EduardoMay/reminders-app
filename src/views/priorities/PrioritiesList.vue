@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/user/login"></ion-back-button>
+          <ion-back-button default-href="/reminders/list"></ion-back-button>
         </ion-buttons>
         <ion-title>Lista de prioridades</ion-title>
         <ion-buttons slot="end">

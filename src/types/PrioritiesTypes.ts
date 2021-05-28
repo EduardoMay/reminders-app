@@ -3,9 +3,10 @@
  */
 export const PrioritiesTypes = {
   GET_PRIORITIES: "getPriorities",
-  GET_PRIORITy: "getPriority",
+  GET_PRIORITY: "getPriority",
   SAVE_REMINDERS: "savePriority",
   UPDATE_PRIORITY: "updatePriority",
   DELETE_PRIORITY: "deletePriority",
-  SET_DATA: "setData"
+  SET_DATA: "setData",
+  SET_PRIORITY: "setPriority"
 };
