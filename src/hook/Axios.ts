@@ -64,4 +64,19 @@ export default class Axios {
   ): Promise<AxiosResponse> {
     return await axios.put(`${this.URL_API}/${endpoint}/${id}`, data);
   }
+
+  /**
+   * Method PUT
+   * @param   {String}  endpoint Ruta de la API
+   * @param   {String}  id id del datos
+   * @param   {Object}  data datos actualizados
+   * @returns  {Promise<AxiosResponse>}
+   */
+  public async patch(
+    endpoint: string,
+    id: string,
+    data: object
+  ): Promise<AxiosResponse> {
+    return await axios.patch(`${this.URL_API}/${endpoint}/${id}`, data);
+  }
 }

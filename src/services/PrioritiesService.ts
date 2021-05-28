@@ -1,5 +1,5 @@
 import Axios from "@/hook/Axios";
-import { Priority } from "@/interfaces/Priority";
+import { DataPriority, Priority } from "@/interfaces/Priority";
 
 export class PrioritiesService {
   public axios = new Axios();
@@ -34,5 +34,21 @@ export class PrioritiesService {
       return { message: "Ocurrió un error vuelve a intentar", error: true };
 
     return { message: "Se guardo correctamente", error: false };
+  }
+
+  /**
+   * Save priority updated
+   * @param dataPriority Data priority
+   */
+  public async updatePriority(dataPriority: DataPriority): Promise<boolean> {
+    const { data: priority }: { data: Priority } = dataPriority;
+
+    const { data } = await this.axios.patch(
+      `priorities/${priority._id}`,
+      String(priority.id_user),
+      dataPriority
+    );
+
+    return data.error;
   }
 }
