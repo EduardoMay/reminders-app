@@ -1,6 +1,10 @@
 <template>
   <ion-list v-if="priorities.length > 0">
-    <ion-item v-for="priority in priorities" :key="priority._id">
+    <ion-item
+      v-for="priority in priorities"
+      :key="priority._id"
+      @click="presentActionSheet(priority)"
+    >
       <ion-label>
         {{ priority.title }}
       </ion-label>
@@ -15,8 +19,14 @@
 </template>
 
 <script lang="ts">
-import { IonList, IonItem, IonLabel, IonIcon } from "@ionic/vue";
-import { menu, create } from "ionicons/icons";
+import {
+  IonList,
+  IonItem,
+  IonLabel,
+  IonIcon,
+  actionSheetController
+} from "@ionic/vue";
+import { menu, create, trash } from "ionicons/icons";
 import { mapMutations, useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
@@ -47,6 +57,34 @@ export default defineComponent({
     editPriority(priority: Priority): void {
       this.setPriority(priority);
       this.router.push("edit");
+    },
+    async presentActionSheet(priority: Priority): Promise<void> {
+      const actionSheet = await actionSheetController.create({
+        header: "Albums",
+        cssClass: "my-custom-class",
+        buttons: [
+          {
+            text: "Eliminar",
+            role: "destructive",
+            icon: trash,
+            handler: () => {
+              console.log("Delete clicked", priority._id);
+            }
+          },
+          {
+            text: "Editar",
+            icon: create,
+            handler: () => {
+              this.editPriority(priority);
+              console.log("Share clicked", priority);
+            }
+          }
+        ]
+      });
+      await actionSheet.present();
+
+      const { role } = await actionSheet.onDidDismiss();
+      console.log("onDidDismiss resolved with role", role);
     }
   }
 });
