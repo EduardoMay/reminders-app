@@ -24,7 +24,8 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  actionSheetController
+  actionSheetController,
+  toastController
 } from "@ionic/vue";
 import { menu, create, trash, close } from "ionicons/icons";
 import { mapActions, mapMutations, useStore } from "vuex";
@@ -59,6 +60,13 @@ export default defineComponent({
       this.setPriority(priority);
       this.router.push("edit");
     },
+    async openToast(title: string): Promise<any> {
+      const toast = await toastController.create({
+        message: title,
+        duration: 1200
+      });
+      return toast.present();
+    },
     async presentActionSheet(priority: Priority): Promise<void> {
       const actionSheet = await actionSheetController.create({
         header: "Albums",
@@ -67,8 +75,10 @@ export default defineComponent({
           {
             text: "Eliminar",
             icon: trash,
-            handler: () => {
-              this.deletePriority(String(priority._id));
+            handler: async () => {
+              const message = await this.deletePriority(priority);
+
+              this.openToast(message);
             }
           },
           {
