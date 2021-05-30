@@ -53,9 +53,23 @@ const actions = {
   },
   async [PrioritiesTypes.DELETE_PRIORITY](
     { commit }: ParametersActions,
-    idPriority: string
-  ) {
-    console.log(idPriority);
+    priority: Priority
+  ): Promise<string> {
+    const {
+      error,
+      priorities
+    }: {
+      error: boolean;
+      priorities: Priority[];
+    } = await priorityService.deletePriority(priority);
+
+    if (error) {
+      return "Ah ocurrido un error vuelva a intentarlo nuevamente";
+    }
+
+    commit(PrioritiesTypes.SET_DATA, priorities);
+
+    return "Se ha borrado correctamente";
   }
 };
 
