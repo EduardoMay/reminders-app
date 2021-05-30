@@ -50,6 +50,12 @@ const actions = {
     dataPriority: DataPriority
   ) {
     return await priorityService.updatePriority(dataPriority);
+  },
+  async [PrioritiesTypes.DELETE_PRIORITY](
+    { commit }: ParametersActions,
+    idPriority: string
+  ) {
+    console.log(idPriority);
   }
 };
 

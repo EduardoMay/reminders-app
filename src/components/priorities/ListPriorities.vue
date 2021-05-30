@@ -26,8 +26,8 @@ import {
   IonIcon,
   actionSheetController
 } from "@ionic/vue";
-import { menu, create, trash } from "ionicons/icons";
-import { mapMutations, useStore } from "vuex";
+import { menu, create, trash, close } from "ionicons/icons";
+import { mapActions, mapMutations, useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { Priority } from "@/interfaces/Priority";
@@ -54,6 +54,7 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations(["setPriority"]),
+    ...mapActions(["deletePriority"]),
     editPriority(priority: Priority): void {
       this.setPriority(priority);
       this.router.push("edit");
@@ -65,10 +66,9 @@ export default defineComponent({
         buttons: [
           {
             text: "Eliminar",
-            role: "destructive",
             icon: trash,
             handler: () => {
-              console.log("Delete clicked", priority._id);
+              this.deletePriority(String(priority._id));
             }
           },
           {
@@ -76,7 +76,14 @@ export default defineComponent({
             icon: create,
             handler: () => {
               this.editPriority(priority);
-              console.log("Share clicked", priority);
+            }
+          },
+          {
+            text: "Cancelar",
+            icon: close,
+            role: "cancel",
+            handler: () => {
+              console.log("Cancel clicked");
             }
           }
         ]
