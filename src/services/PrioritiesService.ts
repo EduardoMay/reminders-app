@@ -51,4 +51,16 @@ export class PrioritiesService {
 
     return data.error;
   }
+
+  public async deletePriority(
+    priority: Priority
+  ): Promise<{
+    error: boolean;
+    priorities: Priority[];
+  }> {
+    const { _id, id_user } = priority;
+    const { data } = await this.axios.delete(`priorities/${_id}`, id_user);
+
+    return data;
+  }
 }

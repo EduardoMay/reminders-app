@@ -24,10 +24,11 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  actionSheetController
+  actionSheetController,
+  toastController
 } from "@ionic/vue";
-import { menu, create, trash } from "ionicons/icons";
-import { mapMutations, useStore } from "vuex";
+import { menu, create, trash, close } from "ionicons/icons";
+import { mapActions, mapMutations, useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { Priority } from "@/interfaces/Priority";
@@ -54,9 +55,17 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations(["setPriority"]),
+    ...mapActions(["deletePriority"]),
     editPriority(priority: Priority): void {
       this.setPriority(priority);
       this.router.push("edit");
+    },
+    async openToast(title: string): Promise<any> {
+      const toast = await toastController.create({
+        message: title,
+        duration: 1200
+      });
+      return toast.present();
     },
     async presentActionSheet(priority: Priority): Promise<void> {
       const actionSheet = await actionSheetController.create({
@@ -65,10 +74,11 @@ export default defineComponent({
         buttons: [
           {
             text: "Eliminar",
-            role: "destructive",
             icon: trash,
-            handler: () => {
-              console.log("Delete clicked", priority._id);
+            handler: async () => {
+              const message = await this.deletePriority(priority);
+
+              this.openToast(message);
             }
           },
           {
@@ -76,7 +86,14 @@ export default defineComponent({
             icon: create,
             handler: () => {
               this.editPriority(priority);
-              console.log("Share clicked", priority);
+            }
+          },
+          {
+            text: "Cancelar",
+            icon: close,
+            role: "cancel",
+            handler: () => {
+              console.log("Cancel clicked");
             }
           }
         ]
