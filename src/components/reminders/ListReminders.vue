@@ -15,7 +15,7 @@
 <script lang="ts">
 import { menuController, IonList, IonItem, IonLabel } from "@ionic/vue";
 import { menu } from "ionicons/icons";
-import { useStore } from "vuex";
+import { mapMutations, useStore } from "vuex";
 import { computed, defineComponent, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ReminderTypes } from "@/types/ReminderTypes";
@@ -50,9 +50,10 @@ export default defineComponent({
       menuController.open("menu");
     },
     viewReminder(reminder: Reminder): void {
-      console.log(reminder);
+      this.getReminder(reminder);
       this.router.push("/reminders/view");
-    }
+    },
+    ...mapMutations(["getReminder"])
   }
 });
 </script>

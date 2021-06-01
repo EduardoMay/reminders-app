@@ -117,7 +117,11 @@ export default defineComponent({
         title: this.title,
         description: this.description,
         date_reminder: this.dateReminder,
-        priority: {},
+        priority: {
+          id_user: "",
+          title: "",
+          color: ""
+        },
         tags: []
       };
 

@@ -1,5 +1,5 @@
 // Interfaces
-import { Reminder } from "@/interfaces/Reminder";
+import { Reminder, ReminderImpl } from "@/interfaces/Reminder";
 // Services
 import ReminderService from "@/services/ReminderService";
 // Types
@@ -16,11 +16,13 @@ interface ParametersActions {
 interface StateReminder {
   reminders: Reminder[];
   idUser: string;
+  reminder: Reminder;
 }
 
 const state = (): StateReminder => ({
   reminders: [],
-  idUser: ""
+  idUser: "",
+  reminder: new ReminderImpl()
 });
 
 const actions = {
@@ -55,6 +57,9 @@ const mutations = {
     reminders: Reminder[]
   ) {
     state.reminders = reminders;
+  },
+  [ReminderTypes.GET_REMINDER](state: StateReminder, reminder: Reminder) {
+    state.reminder = reminder;
   }
 };
 
