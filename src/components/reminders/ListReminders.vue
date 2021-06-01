@@ -1,6 +1,10 @@
 <template>
   <ion-list v-if="reminders && reminders.length > 0">
-    <ion-item v-for="reminder in reminders" :key="reminder._id">
+    <ion-item
+      v-for="reminder in reminders"
+      :key="reminder._id"
+      @click="viewReminder(reminder)"
+    >
       <ion-label>
         {{ reminder.title }}
       </ion-label>
@@ -15,6 +19,7 @@ import { useStore } from "vuex";
 import { computed, defineComponent, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ReminderTypes } from "@/types/ReminderTypes";
+import { Reminder } from "@/interfaces/Reminder";
 
 export default defineComponent({
   name: "ListReminders",
@@ -43,6 +48,10 @@ export default defineComponent({
   methods: {
     openMenu(): void {
       menuController.open("menu");
+    },
+    viewReminder(reminder: Reminder): void {
+      console.log(reminder);
+      this.router.push("/reminders/view");
     }
   }
 });

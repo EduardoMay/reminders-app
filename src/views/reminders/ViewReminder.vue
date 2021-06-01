@@ -3,9 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button slot="icon-only">
-            <ion-icon :icon="arrowBack" slot="icon-only"></ion-icon>
-          </ion-button>
+          <ion-back-button default-href="/reminders"></ion-back-button>
         </ion-buttons>
         <ion-title>Title</ion-title>
       </ion-toolbar>
@@ -24,8 +22,7 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons,
-  IonButton,
-  IonIcon
+  IonBackButton
 } from "@ionic/vue";
 import { arrowBack } from "ionicons/icons";
 export default defineComponent({
@@ -37,8 +34,7 @@ export default defineComponent({
     IonTitle,
     IonToolbar,
     IonButtons,
-    IonButton,
-    IonIcon
+    IonBackButton
   },
   setup() {
     return { arrowBack };
