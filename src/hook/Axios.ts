@@ -1,16 +1,17 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
 
 /**
  * Usar todos los métodos http utilizando la librería de axios
  */
 export default class Axios {
   readonly URL_API = process.env.VUE_APP_BASE_URL_API;
-  public TOKEN = localStorage.token ? localStorage.token : "";
+  public TOKEN = localStorage.token ? localStorage.token : '';
 
-  constructor() {
+  constructor(idUser: string) {
     axios.defaults.headers = {
-      "Content-Type": "application/json",
-      Authorization: this.TOKEN
+      'Content-Type': 'application/json',
+      Authorization: this.TOKEN,
+      'id-user': idUser
     };
     axios.defaults.withCredentials = true;
   }

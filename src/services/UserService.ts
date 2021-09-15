@@ -1,26 +1,23 @@
-import Axios from "@/hook/Axios";
-import { User } from "@/interfaces/User";
-import { AxiosResponse } from "axios";
+import Model from '@/extends/Model';
+import Axios from '@/hook/Axios';
+import { User } from '@/interfaces/User';
 
-export default class UserService {
-  public axios = new Axios();
-  readonly BASE_URL_API = process.env.VUE_APP_BASE_URL_API;
-
+export default class UserService extends Model {
   /**
    * verify token
    */
   public async verifyToken(): Promise<boolean> {
+    const _axios = new Axios(this.idUser);
     let status = false;
 
     try {
-      const { data } = await this.axios.get(`users/verify`);
+      const { data } = await _axios.get(`users/verify`);
       const { auth, token } = data;
 
       if (auth) {
         this.setToken(token);
-
         status = true;
-      } else status = false;
+      }
     } catch ({ response }) {
       this.clearToken();
       status = false;
@@ -31,29 +28,28 @@ export default class UserService {
 
   /**
    * Login user
-   * @param user
-   * @return  {*}
+   * @param user data user
    */
-  public async login(
-    user: User
-  ): Promise<{ status: boolean; dataUser?: User }> {
-    const { data } = await this.axios.post("users/login", user);
+  public async login(user: User): Promise<User | boolean> {
+    const _axios = new Axios(this.idUser);
+    const { data } = await _axios.post('users/login', user);
     const { error, auth, token, user: dataUser } = data;
 
-    if (error && !auth) return { status: false };
+    if (error && !auth) return false;
 
     this.setToken(token);
     this.setIdUser(dataUser._id);
 
-    return { dataUser, status: true };
+    return dataUser;
   }
 
   /**
    * Register new user
-   * @param user
+   * @param user data user
    */
   public async register(user: User): Promise<string> {
-    const { data } = await this.axios.post("users/register", user);
+    const _axios = new Axios(this.idUser);
+    const { data } = await _axios.post('users/register', user);
     const { message } = data;
 
     return message;
@@ -61,30 +57,30 @@ export default class UserService {
 
   /**
    * get data profile
-   * @param id
-   * @return {*}
+   * @param id id user
    */
   public async profile(id: string): Promise<any> {
-    const { data } = await this.axios.get(`users/user/${id}`);
+    const _axios = new Axios(this.idUser);
+    const { data } = await _axios.get(`users/user/${id}`);
 
     return data;
   }
 
   /**
    * Re login user
-   * @return  {*}
    */
   public async relogin(): Promise<{ user: User; status: boolean }> {
+    const _axios = new Axios(this.idUser);
     const dataUser: { user: User; status: boolean } = {
       user: {},
       status: false
     };
 
     try {
-      const { data } = await this.axios.get(`users/verify`);
+      const { data } = await _axios.get(`users/verify`);
       const { auth, user }: { auth: boolean; user: User } = data;
 
-      localStorage.setItem("idUser", String(user._id));
+      localStorage.setItem('idUser', String(user._id));
 
       if (auth) dataUser.user = user;
     } catch ({ response }) {
@@ -99,7 +95,8 @@ export default class UserService {
    * Logout user
    */
   public async logout(): Promise<void> {
-    await this.axios.get(`users/logout`);
+    const _axios = new Axios(this.idUser);
+    await _axios.get(`users/logout`);
 
     this.clearToken();
   }
@@ -109,7 +106,7 @@ export default class UserService {
    * @param token
    */
   public setToken(token: string): void {
-    localStorage.setItem("token", token);
+    localStorage.setItem('token', token);
   }
 
   /**
@@ -117,14 +114,14 @@ export default class UserService {
    * @param id string
    */
   public setIdUser(id: string): void {
-    localStorage.setItem("idUser", id);
+    localStorage.setItem('idUser', id);
   }
 
   /**
    * Clear token
    */
   public clearToken(): void {
-    localStorage.removeItem("token");
-    localStorage.removeItem("idUser");
+    localStorage.removeItem('token');
+    localStorage.removeItem('idUser');
   }
 }

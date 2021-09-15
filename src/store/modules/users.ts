@@ -1,14 +1,12 @@
-// Hooks
-import Axios from "@/hook/Axios";
 // Services
-import UserService from "@/services/UserService";
+import UserService from '@/services/UserService';
 // Types
-import { UserTypes } from "@/types/UserTypes";
-import { ReminderTypes } from "@/types/ReminderTypes";
+import { UserTypes } from '@/types/UserTypes';
+import { ReminderTypes } from '@/types/ReminderTypes';
 // Interfaces
-import { User } from "@/interfaces/User";
+import { User } from '@/interfaces/User';
 // Vuex
-import { Commit, Dispatch } from "vuex";
+import { Commit, Dispatch } from 'vuex';
 
 const userService = new UserService();
 
@@ -22,7 +20,7 @@ interface StateUser {
 }
 
 const state = (): StateUser => ({
-  user: { email: "" }
+  user: { email: '' }
 });
 
 const actions = {
@@ -31,19 +29,11 @@ const actions = {
     { user }: { user: User }
   ): Promise<boolean> {
     try {
-      const {
-        status,
-        dataUser
-      }: {
-        status: boolean;
-        dataUser?: User;
-      } = await userService.login(user);
+      const data = await userService.login(user);
 
-      if (!status) return false;
+      if (!data) return false;
 
-      commit(UserTypes.SET_DATA, dataUser);
-
-      new Axios();
+      commit(UserTypes.SET_DATA, data);
 
       return true;
     } catch ({ response }) {
@@ -92,7 +82,7 @@ const mutations = {
     state.user = dataUser;
   },
   async [UserTypes.LOGOUT](state: StateUser) {
-    state.user = { email: "" };
+    state.user = { email: '' };
   }
 };
 

@@ -1,15 +1,15 @@
-import Axios from "@/hook/Axios";
-import { DataPriority, Priority } from "@/interfaces/Priority";
+import Model from '@/extends/Model';
+import Axios from '@/hook/Axios';
+import { DataPriority, Priority } from '@/interfaces/Priority';
 
-export class PrioritiesService {
-  public axios = new Axios();
-
+export class PrioritiesService extends Model {
   /**
    * get Priorities
    * @param id string
    */
   public async getPriorities(id: string): Promise<Priority[]> {
-    const { data } = await this.axios.get(`priorities/${id}`);
+    const _axios = new Axios(this.idUser);
+    const { data } = await _axios.get(`priorities/${id}`);
     const {
       error,
       priorities
@@ -28,12 +28,13 @@ export class PrioritiesService {
     priority: { data: Priority },
     idUser: string
   ): Promise<{ message: string; error: boolean }> {
-    const { data } = await this.axios.post(`priorities/${idUser}`, priority);
+    const _axios = new Axios(this.idUser);
+    const { data } = await _axios.post(`priorities/${idUser}`, priority);
 
     if (data.error)
-      return { message: "Ocurrió un error vuelve a intentar", error: true };
+      return { message: 'Ocurrió un error vuelve a intentar', error: true };
 
-    return { message: "Se guardo correctamente", error: false };
+    return { message: 'Se guardo correctamente', error: false };
   }
 
   /**
@@ -41,9 +42,10 @@ export class PrioritiesService {
    * @param dataPriority Data priority
    */
   public async updatePriority(dataPriority: DataPriority): Promise<boolean> {
+    const _axios = new Axios(this.idUser);
     const { data: priority }: { data: Priority } = dataPriority;
 
-    const { data } = await this.axios.patch(
+    const { data } = await _axios.patch(
       `priorities/${priority._id}`,
       String(priority.id_user),
       dataPriority
@@ -58,8 +60,9 @@ export class PrioritiesService {
     error: boolean;
     priorities: Priority[];
   }> {
+    const _axios = new Axios(this.idUser);
     const { _id, id_user } = priority;
-    const { data } = await this.axios.delete(`priorities/${_id}`, id_user);
+    const { data } = await _axios.delete(`priorities/${_id}`, id_user);
 
     return data;
   }
