@@ -1,5 +1,6 @@
 import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
+import { UserRoutesApi } from '@/hook/user.routes';
 import { User } from '@/interfaces/User';
 
 export default class UserService extends Model {
@@ -11,7 +12,7 @@ export default class UserService extends Model {
     let status = false;
 
     try {
-      const { data } = await _axios.get(`users/verify`);
+      const { data } = await _axios.get(UserRoutesApi.VERIFY);
       const { auth, token } = data;
 
       if (auth) {
@@ -32,7 +33,7 @@ export default class UserService extends Model {
    */
   public async login(user: User): Promise<User | boolean> {
     const _axios = new Axios(this.idUser);
-    const { data } = await _axios.post('users/login', user);
+    const { data } = await _axios.post(UserRoutesApi.LOGIN, user);
     const { error, auth, token, user: dataUser } = data;
 
     if (error && !auth) return false;
@@ -49,7 +50,7 @@ export default class UserService extends Model {
    */
   public async register(user: User): Promise<string> {
     const _axios = new Axios(this.idUser);
-    const { data } = await _axios.post('users/register', user);
+    const { data } = await _axios.post(UserRoutesApi.REGISTER, user);
     const { message } = data;
 
     return message;
@@ -61,7 +62,7 @@ export default class UserService extends Model {
    */
   public async profile(id: string): Promise<any> {
     const _axios = new Axios(this.idUser);
-    const { data } = await _axios.get(`users/user/${id}`);
+    const { data } = await _axios.get(`${UserRoutesApi.GET_USER}/${id}`);
 
     return data;
   }
@@ -77,7 +78,7 @@ export default class UserService extends Model {
     };
 
     try {
-      const { data } = await _axios.get(`users/verify`);
+      const { data } = await _axios.get(UserRoutesApi.VERIFY);
       const { auth, user }: { auth: boolean; user: User } = data;
 
       localStorage.setItem('idUser', String(user._id));
@@ -96,7 +97,7 @@ export default class UserService extends Model {
    */
   public async logout(): Promise<void> {
     const _axios = new Axios(this.idUser);
-    await _axios.get(`users/logout`);
+    await _axios.get(UserRoutesApi.LOGOUT);
 
     this.clearToken();
   }
