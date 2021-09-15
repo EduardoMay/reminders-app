@@ -1,68 +1,75 @@
 import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
-import { DataPriority, Priority } from '@/interfaces/Priority';
+import { PrioritiesRoutesAPi } from '@/hook/priorities.routes';
+import { PriorityInterface } from '@/interfaces/Priority';
+import { ResponseApi } from '@/interfaces/ResponseApi';
 
 export class PrioritiesService extends Model {
   /**
    * get Priorities
-   * @param id string
    */
-  public async getPriorities(id: string): Promise<Priority[]> {
+  public async getPriorities(): Promise<PriorityInterface[] | boolean> {
     const _axios = new Axios(this.idUser);
-    const { data } = await _axios.get(`priorities/${id}`);
-    const {
-      error,
-      priorities
-    }: { error: boolean; priorities: Priority[] } = data;
+    const res = await _axios.get(PrioritiesRoutesAPi.PRIORITIES);
+    const { error, data }: ResponseApi = res.data;
 
-    if (error) return [];
+    if (error) return false;
 
-    return priorities;
+    return data;
   }
 
   /**
    * Save priority
-   * @param {object} priority
+   * @param priority data priority
    */
   public async savePriority(
-    priority: { data: Priority },
-    idUser: string
-  ): Promise<{ message: string; error: boolean }> {
+    priority: PriorityInterface
+  ): Promise<PriorityInterface[] | boolean> {
     const _axios = new Axios(this.idUser);
-    const { data } = await _axios.post(`priorities/${idUser}`, priority);
+    const res = await _axios.post(PrioritiesRoutesAPi.CREATE, priority);
+    const { data, error }: ResponseApi = res.data;
 
-    if (data.error)
-      return { message: 'Ocurrió un error vuelve a intentar', error: true };
+    if (error) return false;
 
-    return { message: 'Se guardo correctamente', error: false };
+    return data;
   }
 
   /**
    * Save priority updated
-   * @param dataPriority Data priority
+   * @param priority Data priority
    */
-  public async updatePriority(dataPriority: DataPriority): Promise<boolean> {
+  public async updatePriority(
+    priority: PriorityInterface
+  ): Promise<PriorityInterface[] | boolean> {
     const _axios = new Axios(this.idUser);
-    const { data: priority }: { data: Priority } = dataPriority;
 
-    const { data } = await _axios.patch(
-      `priorities/${priority._id}`,
-      String(priority.id_user),
-      dataPriority
+    const res = await _axios.patch(
+      PrioritiesRoutesAPi.UPDATE,
+      priority._id,
+      priority
     );
 
-    return data.error;
+    const { data, error }: ResponseApi = res.data;
+
+    if (error) return false;
+
+    return data;
   }
 
+  /**
+   * delete priority
+   * @param priority data priority
+   * @returns data or status
+   */
   public async deletePriority(
-    priority: Priority
+    priority: PriorityInterface
   ): Promise<{
     error: boolean;
-    priorities: Priority[];
+    priorities: PriorityInterface[];
   }> {
     const _axios = new Axios(this.idUser);
-    const { _id, id_user } = priority;
-    const { data } = await _axios.delete(`priorities/${_id}`, id_user);
+    const { _id } = priority;
+    const { data } = await _axios.delete(PrioritiesRoutesAPi.DELETE, _id);
 
     return data;
   }

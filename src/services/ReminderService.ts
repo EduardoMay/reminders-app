@@ -1,38 +1,38 @@
 import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
-import { Reminder } from '@/interfaces/Reminder';
+import { RemindersRoutesAPi } from '@/hook/reminders.routes';
+import { ReminderInterface } from '@/interfaces/Reminder';
+import { ResponseApi } from '@/interfaces/ResponseApi';
 
 export default class ReminderService extends Model {
-  public _axios: Axios;
-
-  constructor() {
-    super();
-    this._axios = new Axios(this.idUser);
-  }
-
   /**
    * Save new reminder
    * @param reminder
    */
-  public async saveReminder(reminder: Reminder): Promise<boolean | Reminder[]> {
-    const { data } = await this._axios.post(`reminders`, reminder);
+  public async saveReminder(
+    reminder: ReminderInterface
+  ): Promise<boolean | ReminderInterface[]> {
+    const _axios = new Axios(this.idUser);
+    const res = await _axios.post(RemindersRoutesAPi.CREATE, reminder);
 
-    const { error, reminders } = data;
+    const { data, error }: ResponseApi = res.data;
 
     if (error) return false;
 
-    return reminders;
+    return data;
   }
 
   /**
    * Get all reminders
-   * @param idUser
    */
-  public async getReminders(idUser: string): Promise<Reminder[]> {
-    const { data } = await this._axios.get(`reminders`);
+  public async getReminders(): Promise<ReminderInterface[] | boolean> {
+    const _axios = new Axios(this.idUser);
+    const res = await _axios.get(RemindersRoutesAPi.REMINDERS);
 
-    const { reminders } = data;
+    const { data, error }: ResponseApi = res.data;
 
-    return reminders;
+    if (error) return false;
+
+    return data;
   }
 }
