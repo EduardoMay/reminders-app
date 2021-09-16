@@ -3,7 +3,7 @@
     side="start"
     content-id="main-content"
     menu-id="menu"
-    :disabled="!dataUser"
+    :disabled="active"
   >
     <ion-header>
       <ion-toolbar translucent>
@@ -17,7 +17,7 @@
       <ion-list>
         <ion-item button @click="openEnd()">
           <ion-icon :icon="bookmark" slot="start"></ion-icon>
-          <ion-label>item 1 {{ !dataUser }}</ion-label>
+          <ion-label>item 1 {{ !active }}</ion-label>
         </ion-item>
       </ion-list>
 
@@ -69,6 +69,7 @@ import { useStore } from 'vuex';
 import { UserTypes } from '@/types/UserTypes';
 import { computed, defineComponent, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
+import isEmpty from 'is-empty';
 
 export default defineComponent({
   name: 'Menu',
@@ -86,18 +87,25 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
+    const active = computed(() => {
+      const user = store.getters.getUser;
 
-    // FIXME: NO SE PARA QUE SIRVE
-    // onBeforeMount(async () => {
-    //   await store.dispatch("relogin");
-    // });
+      return isEmpty(user);
+    });
+
+    // Cuando recarga la aplicacion
+    if (!active.value) {
+      onBeforeMount(async () => {
+        await store.dispatch('relogin');
+      });
+    }
 
     return {
       heart,
       home,
       create,
       bookmark,
-      dataUser: computed(() => store.state.UsersModule.user),
+      active,
       store,
       router
     };

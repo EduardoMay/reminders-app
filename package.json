@@ -19,6 +19,7 @@
     "@ionic/vue-router": "^5.4.0",
     "axios": "^0.21.4",
     "core-js": "^3.6.5",
+    "is-empty": "^1.2.0",
     "vue": "^3.2.1",
     "vue-axios": "^3.3.6",
     "vue-router": "^4.0.0-0",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "3.2.2",
+    "@types/is-empty": "^1.2.0",
     "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",

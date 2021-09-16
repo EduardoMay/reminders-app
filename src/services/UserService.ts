@@ -8,7 +8,6 @@ export default class UserService extends Model {
    * verify token
    */
   public async verifyToken(): Promise<boolean> {
-    console.log(this.idUser);
     const _axios = new Axios(this.idUser);
     let status = false;
 

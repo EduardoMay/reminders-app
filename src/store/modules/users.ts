@@ -20,7 +20,7 @@ interface StateUser {
 }
 
 const state = (): StateUser => ({
-  user: { email: '' }
+  user: {}
 });
 
 const actions = {
@@ -78,17 +78,20 @@ const actions = {
 };
 
 const mutations = {
-  async [UserTypes.SET_DATA](state: StateUser, dataUser: UserInterface) {
+  async setDataUser(state: StateUser, dataUser: UserInterface) {
     state.user = dataUser;
   },
-  async [UserTypes.LOGOUT](state: StateUser) {
-    state.user = { email: '' };
+  async logout(state: StateUser) {
+    state.user = {};
   }
 };
 
 const getters = {
   getIdUser(): string {
     return localStorage.idUser;
+  },
+  getUser(state: StateUser): UserInterface {
+    return state.user;
   }
 };
 
