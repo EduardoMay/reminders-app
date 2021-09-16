@@ -4,7 +4,7 @@ import UserService from '@/services/UserService';
 import { UserTypes } from '@/types/UserTypes';
 import { ReminderTypes } from '@/types/ReminderTypes';
 // Interfaces
-import { User } from '@/interfaces/User';
+import { UserInterface } from '@/interfaces/User';
 // Vuex
 import { Commit, Dispatch } from 'vuex';
 
@@ -16,7 +16,7 @@ interface ParametersActions {
 }
 
 interface StateUser {
-  user: User;
+  user: UserInterface;
 }
 
 const state = (): StateUser => ({
@@ -26,7 +26,7 @@ const state = (): StateUser => ({
 const actions = {
   async loginUser(
     { commit }: ParametersActions,
-    { user }: { user: User }
+    user: UserInterface
   ): Promise<boolean> {
     try {
       const data = await userService.login(user);
@@ -44,7 +44,7 @@ const actions = {
     const {
       user,
       status
-    }: { user: User; status: boolean } = await userService.relogin();
+    }: { user: UserInterface; status: boolean } = await userService.relogin();
     // TODO verificar el status al hacer relogin
 
     commit(UserTypes.SET_DATA, user);
@@ -64,7 +64,7 @@ const actions = {
   },
   async [UserTypes.REGISTER](
     _: ParametersActions,
-    user: User
+    user: UserInterface
   ): Promise<string> {
     const message = await userService.register(user);
 
@@ -78,7 +78,7 @@ const actions = {
 };
 
 const mutations = {
-  async [UserTypes.SET_DATA](state: StateUser, dataUser: User) {
+  async [UserTypes.SET_DATA](state: StateUser, dataUser: UserInterface) {
     state.user = dataUser;
   },
   async [UserTypes.LOGOUT](state: StateUser) {

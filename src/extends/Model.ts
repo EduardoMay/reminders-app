@@ -6,10 +6,10 @@ export default class Model {
   }
 
   public set idUser(idUser: string) {
-    this._idUser = idUser;
+    this._idUser = localStorage.idUser || idUser;
   }
 
   public get idUser() {
-    return this._idUser;
+    return localStorage.idUser || this._idUser;
   }
 }

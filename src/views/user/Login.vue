@@ -16,7 +16,7 @@
           <ion-input
             id="email"
             type="email"
-            v-model="email"
+            v-model="user.email"
             v-on:keyup.enter="login()"
           ></ion-input>
         </ion-item>
@@ -26,7 +26,7 @@
           <ion-input
             id="password"
             type="password"
-            v-model="password"
+            v-model="user.password"
             v-on:keyup.enter="login()"
           ></ion-input>
         </ion-item>
@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent } from 'vue';
 import {
   IonContent,
   IonHeader,
@@ -69,15 +69,14 @@ import {
   IonItem,
   IonButton,
   toastController
-} from "@ionic/vue";
-import { arrowBack } from "ionicons/icons";
-import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
-import { UserTypes } from "@/types/UserTypes";
-import { User } from "@/interfaces/User";
+} from '@ionic/vue';
+import { arrowBack } from 'ionicons/icons';
+import { useRoute, useRouter } from 'vue-router';
+import { mapActions, useStore } from 'vuex';
+import User from '@/services/clases/User';
 
 export default defineComponent({
-  name: "LoginUser",
+  name: 'LoginUser',
   components: {
     IonContent,
     IonHeader,
@@ -91,47 +90,35 @@ export default defineComponent({
     IonItem,
     IonButton
   },
-  data() {
-    return {
-      email: "",
-      password: "",
-      replyPassword: ""
-    };
-  },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
+    const user = new User();
 
     return {
       router,
       arrowBack,
-      formCode: computed(() => route.name === "Code"),
+      formCode: computed(() => route.name === 'Code'),
       store,
-      id: computed(() => route.params.id)
+      user
     };
   },
   methods: {
-    login() {
+    ...mapActions(['loginUser']),
+    async login() {
       const emailPatter = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-      if (this.email === "" || this.password === "")
-        return this.openToast("Los campos son obligatorios");
+      if (this.user.validateLogin())
+        return this.openToast('Ingrese correo y contraseña');
 
-      if (!emailPatter.test(this.email))
-        return this.openToast("Ingresa un correo valido");
+      if (!emailPatter.test(this.user.email))
+        return this.openToast('Ingresa un correo valido');
 
-      const user: User = { email: "" };
+      const res = await this.loginUser(this.user);
+      if (!res) return this.openToast('Correo y contraseña son incorrectos');
 
-      user.email = this.email;
-      user.password = this.password;
-
-      this.store.dispatch(UserTypes.LOGIN, { user }).then((status) => {
-        if (!status)
-          return this.openToast("Correo y contraseña son incorrectos");
-
-        this.router.replace(`/reminders`);
-      });
+      this.router.replace(`/reminders`);
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({
