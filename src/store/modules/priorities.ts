@@ -22,7 +22,7 @@ const state = (): StatePriority => ({
 });
 
 const actions = {
-  async [PrioritiesTypes.GET_PRIORITIES]({ commit }: ParametersActions) {
+  async getPriorities({ commit }: ParametersActions) {
     const idUser = localStorage.idUser;
 
     // const priorities: PriorityInterface[] = await priorityService.getPriorities(
@@ -31,7 +31,7 @@ const actions = {
 
     // commit(PrioritiesTypes.SET_DATA, priorities);
   },
-  async [PrioritiesTypes.SAVE_REMINDERS](
+  async savePriority(
     { rootState }: ParametersActions,
     priority: PriorityInterface
   ) {
@@ -43,13 +43,10 @@ const actions = {
 
     // return res;
   },
-  async [PrioritiesTypes.UPDATE_PRIORITY](
-    _: ParametersActions,
-    dataPriority: any
-  ) {
+  async updatePriority(_: ParametersActions, dataPriority: any) {
     return await priorityService.updatePriority(dataPriority);
   },
-  async [PrioritiesTypes.DELETE_PRIORITY](
+  async deletePriority(
     { commit }: ParametersActions,
     priority: PriorityInterface
   ): Promise<string> {
@@ -72,22 +69,16 @@ const actions = {
 };
 
 const mutations = {
-  [PrioritiesTypes.SET_DATA](
-    state: StatePriority,
-    priorities: PriorityInterface[]
-  ): void {
+  setData(state: StatePriority, priorities: PriorityInterface[]): void {
     state.priorities = priorities;
   },
-  [PrioritiesTypes.SET_PRIORITY](
-    state: StatePriority,
-    priority: PriorityInterface
-  ) {
+  setPriority(state: StatePriority, priority: PriorityInterface) {
     state.prioritySelected = priority;
   }
 };
 
 const getters = {
-  [PrioritiesTypes.GET_PRIORITY](state: StatePriority) {
+  getPriority(state: StatePriority) {
     return state.prioritySelected;
   }
 };

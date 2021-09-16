@@ -57,12 +57,12 @@ const actions = {
       }
     );
   },
-  async [UserTypes.LOGOUT]({ commit }: ParametersActions): Promise<void> {
+  async logout({ commit }: ParametersActions): Promise<void> {
     await userService.logout();
 
     commit(UserTypes.LOGOUT);
   },
-  async [UserTypes.REGISTER](
+  async registerUser(
     _: ParametersActions,
     user: UserInterface
   ): Promise<string> {
@@ -70,7 +70,7 @@ const actions = {
 
     return message;
   },
-  async [UserTypes.PROFILE](_: ParametersActions, id: string): Promise<any> {
+  async profile(_: ParametersActions, id: string): Promise<any> {
     const data = await userService.profile(id);
 
     return data;

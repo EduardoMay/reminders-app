@@ -27,7 +27,7 @@ const state = (): StateReminder => ({
 });
 
 const actions = {
-  async [ReminderTypes.SAVE_REMINDER](
+  async saveReminder(
     { commit }: ParametersActions,
     { newReminder }: { newReminder: ReminderInterface }
   ) {
@@ -39,9 +39,7 @@ const actions = {
 
     return true;
   },
-  async [ReminderTypes.GET_REMINDERS]({
-    commit
-  }: ParametersActions): Promise<void> {
+  async getReminders({ commit }: ParametersActions): Promise<void> {
     const reminders = await reminderService.getReminders();
 
     commit(ReminderTypes.GET_REMINDERS, reminders);
@@ -49,22 +47,13 @@ const actions = {
 };
 
 const mutations = {
-  [ReminderTypes.SAVE_REMINDER](
-    state: StateReminder,
-    reminders: ReminderInterface[]
-  ) {
+  saveReminder(state: StateReminder, reminders: ReminderInterface[]) {
     state.reminders = reminders;
   },
-  async [ReminderTypes.GET_REMINDERS](
-    state: StateReminder,
-    reminders: ReminderInterface[]
-  ) {
+  async getReminders(state: StateReminder, reminders: ReminderInterface[]) {
     state.reminders = reminders;
   },
-  [ReminderTypes.GET_REMINDER](
-    state: StateReminder,
-    reminder: ReminderInterface
-  ) {
+  getReminder(state: StateReminder, reminder: ReminderInterface) {
     state.reminder = reminder;
   }
 };
