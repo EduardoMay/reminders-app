@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent } from 'vue';
 import {
   IonContent,
   IonHeader,
@@ -75,15 +75,15 @@ import {
   IonItem,
   IonButton,
   toastController
-} from "@ionic/vue";
-import { arrowBack } from "ionicons/icons";
-import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
-import { UserTypes } from "@/types/UserTypes";
-import { User } from "@/interfaces/User";
+} from '@ionic/vue';
+import { arrowBack } from 'ionicons/icons';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { UserTypes } from '@/types/UserTypes';
+import { UserInterface } from '@/interfaces/User';
 
 export default defineComponent({
-  name: "LoginUser",
+  name: 'LoginUser',
   components: {
     IonContent,
     IonHeader,
@@ -99,9 +99,9 @@ export default defineComponent({
   },
   data() {
     return {
-      email: "",
-      password: "",
-      replyPassword: ""
+      email: '',
+      password: '',
+      replyPassword: ''
     };
   },
   setup() {
@@ -121,30 +121,30 @@ export default defineComponent({
       const emailPatter = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
       if (!emailPatter.test(this.email))
-        return this.openToast("Ingresa un correo valido");
+        return this.openToast('Ingresa un correo valido');
 
-      if (this.email === "" || this.password === "")
-        return this.openToast("Los campos son obligatorios");
+      if (this.email === '' || this.password === '')
+        return this.openToast('Los campos son obligatorios');
 
       if (this.password !== this.replyPassword)
-        return this.openToast("Las contraseñas no son iguales");
+        return this.openToast('Las contraseñas no son iguales');
 
-      const user: User = { email: "" };
+      const user: UserInterface = { email: '' };
 
       user.email = this.email;
       user.password = this.password;
 
       const message = await this.store.dispatch(UserTypes.REGISTER, user);
 
-      if (message === "Registered user")
-        return this.openToast("El email que ingresaste ya ha sido registrado");
+      if (message === 'Registered user')
+        return this.openToast('El email que ingresaste ya ha sido registrado');
 
-      if (message === "Data incomplete")
-        return this.openToast("La contraseña de tener mínimo 5 caracteres");
+      if (message === 'Data incomplete')
+        return this.openToast('La contraseña de tener mínimo 5 caracteres');
 
-      this.openToast("Te has registrado correctamente");
+      this.openToast('Te has registrado correctamente');
 
-      this.router.push("/user/login");
+      this.router.push('/user/login');
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({

@@ -13,16 +13,16 @@
 </template>
 
 <script lang="ts">
-import { menuController, IonList, IonItem, IonLabel } from "@ionic/vue";
-import { menu } from "ionicons/icons";
-import { mapMutations, useStore } from "vuex";
-import { computed, defineComponent, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { ReminderTypes } from "@/types/ReminderTypes";
-import { Reminder } from "@/interfaces/Reminder";
+import { menuController, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { menu } from 'ionicons/icons';
+import { mapMutations, useStore } from 'vuex';
+import { computed, defineComponent, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { ReminderTypes } from '@/types/ReminderTypes';
+import { ReminderInterface } from '@/interfaces/Reminder';
 
 export default defineComponent({
-  name: "ListReminders",
+  name: 'ListReminders',
   components: {
     IonList,
     IonItem,
@@ -47,13 +47,13 @@ export default defineComponent({
   },
   methods: {
     openMenu(): void {
-      menuController.open("menu");
+      menuController.open('menu');
     },
-    viewReminder(reminder: Reminder): void {
+    viewReminder(reminder: ReminderInterface): void {
       this.getReminder(reminder);
-      this.router.push("/reminders/view");
+      this.router.push('/reminders/view');
     },
-    ...mapMutations(["getReminder"])
+    ...mapMutations(['getReminder'])
   }
 });
 </script>

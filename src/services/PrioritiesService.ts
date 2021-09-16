@@ -45,7 +45,7 @@ export class PrioritiesService extends Model {
 
     const res = await _axios.patch(
       PrioritiesRoutesAPi.UPDATE,
-      priority._id,
+      priority._id || '',
       priority
     );
 
@@ -69,7 +69,7 @@ export class PrioritiesService extends Model {
   }> {
     const _axios = new Axios(this.idUser);
     const { _id } = priority;
-    const { data } = await _axios.delete(PrioritiesRoutesAPi.DELETE, _id);
+    const { data } = await _axios.delete(PrioritiesRoutesAPi.DELETE, _id || '');
 
     return data;
   }

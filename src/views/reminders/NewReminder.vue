@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 import {
   IonPage,
   IonHeader,
@@ -68,14 +68,14 @@ import {
   IonBackButton,
   IonButtons,
   toastController
-} from "@ionic/vue";
-import { Reminder } from "@/interfaces/Reminder";
-import { useStore } from "vuex";
-import { ReminderTypes } from "@/types/ReminderTypes";
-import { useRouter } from "vue-router";
+} from '@ionic/vue';
+import { ReminderInterface } from '@/interfaces/Reminder';
+import { useStore } from 'vuex';
+import { ReminderTypes } from '@/types/ReminderTypes';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: "NewReminder",
+  name: 'NewReminder',
   components: {
     IonPage,
     IonHeader,
@@ -92,9 +92,9 @@ export default defineComponent({
   },
   data() {
     return {
-      title: "",
-      description: "",
-      dateReminder: ""
+      title: '',
+      description: '',
+      dateReminder: ''
     };
   },
   setup() {
@@ -106,21 +106,21 @@ export default defineComponent({
   methods: {
     formForm() {
       if (
-        this.title === "" ||
-        this.description === "" ||
-        this.dateReminder === ""
+        this.title === '' ||
+        this.description === '' ||
+        this.dateReminder === ''
       )
-        return this.openToast("Favor de llenar todos los campos");
+        return this.openToast('Favor de llenar todos los campos');
 
-      const newReminder: Reminder = {
+      const newReminder: ReminderInterface = {
         id_user: this.store.state.UsersModule.user._id,
         title: this.title,
         description: this.description,
         date_reminder: this.dateReminder,
         priority: {
-          id_user: "",
-          title: "",
-          color: ""
+          id_user: '',
+          title: '',
+          color: ''
         },
         tags: []
       };
@@ -130,12 +130,12 @@ export default defineComponent({
         .then((status) => {
           if (!status)
             return this.openToast(
-              "Ocurrió un error al guardar, vuelva a intentar"
+              'Ocurrió un error al guardar, vuelva a intentar'
             );
 
-          this.openToast("Se guardo correctamente");
+          this.openToast('Se guardo correctamente');
 
-          this.router.replace("/reminders");
+          this.router.replace('/reminders');
         });
     },
     async openToast(title: string): Promise<any> {

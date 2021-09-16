@@ -63,15 +63,15 @@ import {
   IonItem,
   IonIcon,
   IonLabel
-} from "@ionic/vue";
-import { home, heart, create, bookmark } from "ionicons/icons";
-import { useStore } from "vuex";
-import { UserTypes } from "@/types/UserTypes";
-import { computed, defineComponent, onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
+} from '@ionic/vue';
+import { home, heart, create, bookmark } from 'ionicons/icons';
+import { useStore } from 'vuex';
+import { UserTypes } from '@/types/UserTypes';
+import { computed, defineComponent, onBeforeMount } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: "Menu",
+  name: 'Menu',
   components: {
     IonMenu,
     IonHeader,
@@ -87,9 +87,10 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
 
-    onBeforeMount(async () => {
-      await store.dispatch("relogin");
-    });
+    // FIXME: NO SE PARA QUE SIRVE
+    // onBeforeMount(async () => {
+    //   await store.dispatch("relogin");
+    // });
 
     return {
       heart,
@@ -103,14 +104,14 @@ export default defineComponent({
   },
   methods: {
     openEnd() {
-      menuController.close("start");
+      menuController.close('start');
     },
     async logout() {
       this.openEnd();
 
       await this.store.dispatch(UserTypes.LOGOUT);
 
-      this.router.replace("/user/login");
+      this.router.replace('/user/login');
     }
   }
 });

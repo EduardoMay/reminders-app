@@ -26,15 +26,15 @@ import {
   IonIcon,
   actionSheetController,
   toastController
-} from "@ionic/vue";
-import { menu, create, trash, close } from "ionicons/icons";
-import { mapActions, mapMutations, useStore } from "vuex";
-import { computed, defineComponent } from "vue";
-import { useRouter } from "vue-router";
-import { Priority } from "@/interfaces/Priority";
+} from '@ionic/vue';
+import { menu, create, trash, close } from 'ionicons/icons';
+import { mapActions, mapMutations, useStore } from 'vuex';
+import { computed, defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
+import { PriorityInterface } from '@/interfaces/Priority';
 
 export default defineComponent({
-  name: "ListPriorities",
+  name: 'ListPriorities',
   components: {
     IonList,
     IonItem,
@@ -54,11 +54,11 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapMutations(["setPriority"]),
-    ...mapActions(["deletePriority"]),
-    editPriority(priority: Priority): void {
+    ...mapMutations(['setPriority']),
+    ...mapActions(['deletePriority']),
+    editPriority(priority: PriorityInterface): void {
       this.setPriority(priority);
-      this.router.push("edit");
+      this.router.push('edit');
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({
@@ -67,13 +67,13 @@ export default defineComponent({
       });
       return toast.present();
     },
-    async presentActionSheet(priority: Priority): Promise<void> {
+    async presentActionSheet(priority: PriorityInterface): Promise<void> {
       const actionSheet = await actionSheetController.create({
-        header: "Albums",
-        cssClass: "my-custom-class",
+        header: 'Albums',
+        cssClass: 'my-custom-class',
         buttons: [
           {
-            text: "Eliminar",
+            text: 'Eliminar',
             icon: trash,
             handler: async () => {
               const message = await this.deletePriority(priority);
@@ -82,18 +82,18 @@ export default defineComponent({
             }
           },
           {
-            text: "Editar",
+            text: 'Editar',
             icon: create,
             handler: () => {
               this.editPriority(priority);
             }
           },
           {
-            text: "Cancelar",
+            text: 'Cancelar',
             icon: close,
-            role: "cancel",
+            role: 'cancel',
             handler: () => {
-              console.log("Cancel clicked");
+              console.log('Cancel clicked');
             }
           }
         ]
@@ -101,7 +101,7 @@ export default defineComponent({
       await actionSheet.present();
 
       const { role } = await actionSheet.onDidDismiss();
-      console.log("onDidDismiss resolved with role", role);
+      console.log('onDidDismiss resolved with role', role);
     }
   }
 });

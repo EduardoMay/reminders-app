@@ -1,13 +1,14 @@
 import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
 import { UserRoutesApi } from '@/hook/user.routes';
-import { User } from '@/interfaces/User';
+import { UserInterface } from '@/interfaces/User';
 
 export default class UserService extends Model {
   /**
    * verify token
    */
   public async verifyToken(): Promise<boolean> {
+    console.log(this.idUser);
     const _axios = new Axios(this.idUser);
     let status = false;
 
@@ -31,7 +32,7 @@ export default class UserService extends Model {
    * Login user
    * @param user data user
    */
-  public async login(user: User): Promise<User | boolean> {
+  public async login(user: UserInterface): Promise<UserInterface | boolean> {
     const _axios = new Axios(this.idUser);
     const { data } = await _axios.post(UserRoutesApi.LOGIN, user);
     const { error, auth, token, user: dataUser } = data;
@@ -48,7 +49,7 @@ export default class UserService extends Model {
    * Register new user
    * @param user data user
    */
-  public async register(user: User): Promise<string> {
+  public async register(user: UserInterface): Promise<string> {
     const _axios = new Axios(this.idUser);
     const { data } = await _axios.post(UserRoutesApi.REGISTER, user);
     const { message } = data;
@@ -70,16 +71,16 @@ export default class UserService extends Model {
   /**
    * Re login user
    */
-  public async relogin(): Promise<{ user: User; status: boolean }> {
+  public async relogin(): Promise<{ user: UserInterface; status: boolean }> {
     const _axios = new Axios(this.idUser);
-    const dataUser: { user: User; status: boolean } = {
+    const dataUser: { user: UserInterface; status: boolean } = {
       user: {},
       status: false
     };
 
     try {
       const { data } = await _axios.get(UserRoutesApi.VERIFY);
-      const { auth, user }: { auth: boolean; user: User } = data;
+      const { auth, user }: { auth: boolean; user: UserInterface } = data;
 
       localStorage.setItem('idUser', String(user._id));
 

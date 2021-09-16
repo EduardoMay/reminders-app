@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 import {
   IonContent,
   IonHeader,
@@ -40,14 +40,14 @@ import {
   IonText,
   IonButton,
   IonIcon
-} from "@ionic/vue";
-import { arrowBack, create } from "ionicons/icons";
-import { useStore } from "vuex";
-import { Reminder } from "@/interfaces/Reminder";
-import { useRouter } from "vue-router";
+} from '@ionic/vue';
+import { arrowBack, create } from 'ionicons/icons';
+import { useStore } from 'vuex';
+import { ReminderInterface } from '@/interfaces/Reminder';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: "ViewReminder",
+  name: 'ViewReminder',
   components: {
     IonContent,
     IonHeader,
@@ -63,12 +63,12 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
-    const reminder: Reminder = store.state.RemindersModules.reminder;
+    const reminder: ReminderInterface = store.state.RemindersModules.reminder;
 
     console.log(reminder);
 
-    if (reminder._id === "") {
-      router.replace("/reminders");
+    if (reminder._id === '') {
+      router.replace('/reminders');
     }
 
     return { arrowBack, create, reminder };

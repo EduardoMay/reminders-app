@@ -1,5 +1,6 @@
 // Interfaces
 import { ReminderInterface } from '@/interfaces/Reminder';
+import Reminder from '@/services/clases/Reminder';
 // Services
 import ReminderService from '@/services/ReminderService';
 // Types
@@ -22,7 +23,7 @@ interface StateReminder {
 const state = (): StateReminder => ({
   reminders: [],
   idUser: '',
-  reminder: new ReminderImpl()
+  reminder: new Reminder()
 });
 
 const actions = {
@@ -38,11 +39,10 @@ const actions = {
 
     return true;
   },
-  async [ReminderTypes.GET_REMINDERS](
-    { commit }: ParametersActions,
-    { idUser }: { idUser: string }
-  ): Promise<void> {
-    const reminders = await reminderService.getReminders(idUser);
+  async [ReminderTypes.GET_REMINDERS]({
+    commit
+  }: ParametersActions): Promise<void> {
+    const reminders = await reminderService.getReminders();
 
     commit(ReminderTypes.GET_REMINDERS, reminders);
   }

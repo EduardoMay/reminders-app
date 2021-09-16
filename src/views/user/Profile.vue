@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 import {
   IonPage,
   IonHeader,
@@ -47,12 +47,12 @@ import {
   IonListHeader,
   IonItem,
   IonLabel
-} from "@ionic/vue";
-import { mapActions, mapGetters, useStore } from "vuex";
-import { User } from "@/interfaces/User";
+} from '@ionic/vue';
+import { mapActions, mapGetters, useStore } from 'vuex';
+import { UserInterface } from '@/interfaces/User';
 
 export default defineComponent({
-  name: "Profile",
+  name: 'Profile',
   components: {
     IonPage,
     IonHeader,
@@ -68,7 +68,7 @@ export default defineComponent({
   },
   data() {
     return {
-      user: { email: "", name: "No definido" }
+      user: { email: '', name: 'No definido' }
     };
   },
   setup() {
@@ -77,16 +77,18 @@ export default defineComponent({
     return { store };
   },
   methods: {
-    ...mapActions(["profile"])
+    ...mapActions(['profile'])
   },
   computed: {
-    ...mapGetters(["getIdUser"])
+    ...mapGetters(['getIdUser'])
   },
   async mounted() {
-    const { user }: { user: User } = await this.profile(this.getIdUser);
+    const { user }: { user: UserInterface } = await this.profile(
+      this.getIdUser
+    );
 
     this.user.email = String(user.email);
-    this.user.name = user.name ? user.name : "No definido";
+    this.user.name = user.name ? user.name : 'No definido';
   }
 });
 </script>

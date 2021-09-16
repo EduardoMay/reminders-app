@@ -2,7 +2,7 @@ import { Commit } from 'vuex';
 import { PrioritiesService } from '@/services/PrioritiesService';
 import { PrioritiesTypes } from '@/types/PrioritiesTypes';
 import { PriorityInterface } from '@/interfaces/Priority';
-import { User } from '@/interfaces/User';
+import { UserInterface } from '@/interfaces/User';
 
 const priorityService = new PrioritiesService();
 
@@ -25,27 +25,27 @@ const actions = {
   async [PrioritiesTypes.GET_PRIORITIES]({ commit }: ParametersActions) {
     const idUser = localStorage.idUser;
 
-    const priorities: PriorityInterface[] = await priorityService.getPriorities(
-      idUser
-    );
+    // const priorities: PriorityInterface[] = await priorityService.getPriorities(
+    //   idUser
+    // );
 
-    commit(PrioritiesTypes.SET_DATA, priorities);
+    // commit(PrioritiesTypes.SET_DATA, priorities);
   },
   async [PrioritiesTypes.SAVE_REMINDERS](
     { rootState }: ParametersActions,
     priority: PriorityInterface
   ) {
-    const { _id }: User = rootState.UsersModule.user;
+    const { _id }: UserInterface = rootState.UsersModule.user;
     priority.id_user = String(_id);
     const data = { data: priority };
 
-    const res = await priorityService.savePriority(data, priority.id_user);
+    // const res = await priorityService.savePriority(data, priority.id_user);
 
-    return res;
+    // return res;
   },
   async [PrioritiesTypes.UPDATE_PRIORITY](
     _: ParametersActions,
-    dataPriority: DataPriority
+    dataPriority: any
   ) {
     return await priorityService.updatePriority(dataPriority);
   },
