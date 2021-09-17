@@ -29,13 +29,13 @@ const state = (): StateReminder => ({
 const actions = {
   async saveReminder(
     { commit }: ParametersActions,
-    { newReminder }: { newReminder: ReminderInterface }
+    reminder: ReminderInterface
   ) {
-    const reminders = await reminderService.saveReminder(newReminder);
+    const res = await reminderService.saveReminder(reminder);
 
-    if (!reminders) return false;
+    if (!res) return false;
 
-    commit(ReminderTypes.SAVE_REMINDER, reminders);
+    commit(ReminderTypes.SAVE_REMINDER, res);
 
     return true;
   },

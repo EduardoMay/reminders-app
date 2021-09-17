@@ -6,7 +6,7 @@ export default class Reminder {
   public id_user = '';
   public title = '';
   public description = '';
-  public date_reminder: any;
+  public dateReminder: any;
   public priority: PriorityInterface = {
     id_user: '',
     title: '',
@@ -19,7 +19,7 @@ export default class Reminder {
     this.id_user = reminder.id_user || '';
     this.title = reminder.title || '';
     this.description = reminder.description || '';
-    this.date_reminder = reminder.date_reminder;
+    this.dateReminder = reminder.dateReminder;
     this.priority = reminder.priority || {
       id_user: '',
       title: '',
@@ -30,5 +30,11 @@ export default class Reminder {
 
   public load(reminder: ReminderInterface) {
     this.reminder = { ...reminder };
+  }
+
+  public validateNew(): boolean {
+    return (
+      this.title === '' || this.description === '' || this.dateReminder === ''
+    );
   }
 }

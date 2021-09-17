@@ -17,7 +17,7 @@ export default class ReminderService extends Model {
 
     const { data, error }: ResponseApi = res.data;
 
-    if (error) return false;
+    if (error) return !error;
 
     return data;
   }

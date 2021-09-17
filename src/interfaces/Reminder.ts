@@ -5,7 +5,7 @@ export interface ReminderInterface {
   id_user: string;
   title: string;
   description: string;
-  date_reminder: any;
+  dateReminder: any;
   priority?: PriorityInterface;
   tags?: Array<any>;
   createdAt?: string;

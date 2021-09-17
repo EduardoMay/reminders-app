@@ -15,8 +15,8 @@
         <ion-label position="floating">Titulo</ion-label>
         <ion-input
           type="text"
-          v-model="title"
-          v-on:keyup.enter="formForm()"
+          v-model="reminder.title"
+          v-on:keyup.enter="reminderForm()"
         ></ion-input>
       </ion-item>
 
@@ -24,27 +24,21 @@
         <ion-label position="floating">Descripción</ion-label>
         <ion-input
           type="text"
-          v-model="description"
-          v-on:keyup.enter="formForm()"
+          v-model="reminder.description"
+          v-on:keyup.enter="reminderForm()"
         ></ion-input>
       </ion-item>
 
       <ion-item class="ion-margin-top">
         <ion-label>Fecha</ion-label>
-        <ion-datetime
-          v-model="dateReminder"
-          placeholder="Seleccionar"
-          cancel-text="Cancelar"
-          done-text="Seleccionar"
-          month-short-names="ene, feb, mar, abr, may, jun, jul, ago, sept, oct, nov, dic"
-        ></ion-datetime>
+        <ion-input v-model="reminder.dateReminder" type="date"></ion-input>
       </ion-item>
 
       <ion-button
         expand="full"
         class="ion-margin-top"
         id="buttonForm"
-        @click="formForm()"
+        @click="reminderForm()"
       >
         Guardar
       </ion-button>
@@ -60,7 +54,6 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonDatetime,
   IonLabel,
   IonInput,
   IonItem,
@@ -69,10 +62,9 @@ import {
   IonButtons,
   toastController
 } from '@ionic/vue';
-import { ReminderInterface } from '@/interfaces/Reminder';
-import { useStore } from 'vuex';
-import { ReminderTypes } from '@/types/ReminderTypes';
+import { mapActions, useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import Reminder from '@/services/models/Reminder';
 
 export default defineComponent({
   name: 'NewReminder',
@@ -82,7 +74,6 @@ export default defineComponent({
     IonToolbar,
     IonTitle,
     IonContent,
-    IonDatetime,
     IonLabel,
     IonInput,
     IonItem,
@@ -90,53 +81,26 @@ export default defineComponent({
     IonBackButton,
     IonButtons
   },
-  data() {
-    return {
-      title: '',
-      description: '',
-      dateReminder: ''
-    };
-  },
   setup() {
     const store = useStore();
     const router = useRouter();
+    const reminder = new Reminder();
 
-    return { store, router };
+    return { store, router, reminder };
   },
   methods: {
-    formForm() {
-      if (
-        this.title === '' ||
-        this.description === '' ||
-        this.dateReminder === ''
-      )
+    ...mapActions(['saveReminder']),
+    async reminderForm() {
+      if (this.reminder.validateNew())
         return this.openToast('Favor de llenar todos los campos');
 
-      const newReminder: ReminderInterface = {
-        id_user: this.store.state.UsersModule.user._id,
-        title: this.title,
-        description: this.description,
-        date_reminder: this.dateReminder,
-        priority: {
-          id_user: '',
-          title: '',
-          color: ''
-        },
-        tags: []
-      };
+      const res = await this.saveReminder(this.reminder);
 
-      this.store
-        .dispatch(ReminderTypes.SAVE_REMINDER, { newReminder })
-        .then((status) => {
-          if (!status)
-            return this.openToast(
-              'Ocurrió un error al guardar, vuelva a intentar'
-            );
+      if (res) {
+        this.openToast('Se guardo correctamente');
 
-          this.openToast('Se guardo correctamente');
-
-          this.router.replace('/reminders');
-        });
+        this.router.replace('/reminders');
+      }
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({
