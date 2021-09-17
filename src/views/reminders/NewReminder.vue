@@ -65,6 +65,7 @@ import {
 import { mapActions, useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import Reminder from '@/services/models/Reminder';
+import isEmpty from 'is-empty';
 
 export default defineComponent({
   name: 'NewReminder',
@@ -94,13 +95,11 @@ export default defineComponent({
       if (this.reminder.validateNew())
         return this.openToast('Favor de llenar todos los campos');
 
-      const res = await this.saveReminder(this.reminder);
+      const message = await this.saveReminder(this.reminder);
 
-      if (res) {
-        this.openToast('Se guardo correctamente');
+      if (!isEmpty(message)) return this.openToast(message);
 
-        this.router.replace('/reminders');
-      }
+      return this.router.replace('/reminders');
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({

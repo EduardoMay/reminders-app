@@ -32,12 +32,13 @@ const actions = {
     reminder: ReminderInterface
   ) {
     const res = await reminderService.saveReminder(reminder);
+    const { data, error, message } = res;
 
-    if (!res) return false;
+    if (error) return message;
 
-    commit(ReminderTypes.SAVE_REMINDER, res);
+    commit(ReminderTypes.SAVE_REMINDER, data);
 
-    return true;
+    return message;
   },
   async getReminders({ commit }: ParametersActions): Promise<void> {
     const reminders = await reminderService.getReminders();

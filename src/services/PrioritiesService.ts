@@ -2,7 +2,7 @@ import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
 import { PrioritiesRoutesAPi } from '@/hook/priorities.routes';
 import { PriorityInterface } from '@/interfaces/Priority';
-import { ResponseApi } from '@/interfaces/ResponseApi';
+import { ResponseApiInterface } from '@/interfaces/ResponseApi';
 
 export class PrioritiesService extends Model {
   /**
@@ -11,7 +11,7 @@ export class PrioritiesService extends Model {
   public async getPriorities(): Promise<PriorityInterface[] | boolean> {
     const _axios = new Axios(this.idUser);
     const res = await _axios.get(PrioritiesRoutesAPi.PRIORITIES);
-    const { error, data }: ResponseApi = res.data;
+    const { error, data }: ResponseApiInterface = res.data;
 
     if (error) return false;
 
@@ -27,7 +27,7 @@ export class PrioritiesService extends Model {
   ): Promise<PriorityInterface[] | boolean> {
     const _axios = new Axios(this.idUser);
     const res = await _axios.post(PrioritiesRoutesAPi.CREATE, priority);
-    const { data, error }: ResponseApi = res.data;
+    const { data, error }: ResponseApiInterface = res.data;
 
     if (error) return false;
 
@@ -49,7 +49,7 @@ export class PrioritiesService extends Model {
       priority
     );
 
-    const { data, error }: ResponseApi = res.data;
+    const { data, error }: ResponseApiInterface = res.data;
 
     if (error) return false;
 

@@ -2,7 +2,8 @@ import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
 import { RemindersRoutesAPi } from '@/hook/reminders.routes';
 import { ReminderInterface } from '@/interfaces/Reminder';
-import { ResponseApi } from '@/interfaces/ResponseApi';
+import ResponseApi, { ResponseApiInterface } from '@/interfaces/ResponseApi';
+import { ResponseService } from '@/interfaces/ResponseService';
 
 export default class ReminderService extends Model {
   /**
@@ -11,15 +12,13 @@ export default class ReminderService extends Model {
    */
   public async saveReminder(
     reminder: ReminderInterface
-  ): Promise<boolean | ReminderInterface[]> {
+  ): Promise<ResponseApiInterface> {
     const _axios = new Axios(this.idUser);
-    const res = await _axios.post(RemindersRoutesAPi.CREATE, reminder);
+    const { data } = await _axios.post(RemindersRoutesAPi.CREATE, reminder);
 
-    const { data, error }: ResponseApi = res.data;
+    const response = new ResponseApi(data);
 
-    if (error) return !error;
-
-    return data;
+    return response;
   }
 
   /**
