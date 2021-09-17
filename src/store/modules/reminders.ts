@@ -1,6 +1,6 @@
 // Interfaces
 import { ReminderInterface } from '@/interfaces/Reminder';
-import Reminder from '@/services/clases/Reminder';
+import Reminder from '@/services/models/Reminder';
 // Services
 import ReminderService from '@/services/ReminderService';
 // Types

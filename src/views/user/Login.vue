@@ -73,7 +73,7 @@ import {
 import { arrowBack } from 'ionicons/icons';
 import { useRoute, useRouter } from 'vue-router';
 import { mapActions, useStore } from 'vuex';
-import User from '@/services/clases/User';
+import User from '@/services/models/User';
 
 export default defineComponent({
   name: 'LoginUser',
