@@ -2,7 +2,7 @@
   <form @submit.prevent="createPriority()">
     <ion-item class="ion-margin-top">
       <ion-label position="floating">Titulo</ion-label>
-      <ion-input id="title" type="text" v-model="title"></ion-input>
+      <ion-input id="title" type="text" v-model="priority.title"></ion-input>
     </ion-item>
 
     <ion-item class="ion-margin-top">
@@ -10,8 +10,8 @@
       <ion-input
         id="color"
         type="color"
-        v-model="color"
-        :value="color"
+        v-model="priority.color"
+        :value="priority.color"
       ></ion-input>
     </ion-item>
 
@@ -44,10 +44,9 @@ import {
 } from '@ionic/vue';
 import { menu } from 'ionicons/icons';
 import { mapMutations, useStore } from 'vuex';
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { PriorityInterface } from '@/interfaces/Priority';
-import { PrioritiesTypes } from '@/types/PrioritiesTypes';
+import Priority from '@/services/models/Priority';
 
 export default defineComponent({
   name: 'FormPriorities',
@@ -56,82 +55,44 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
+    const priority = new Priority();
+
     const nameRoute = route.name;
-    let { value: priorityBuffer } = computed(() => store.getters.getPriority);
 
-    if (nameRoute === 'CreatePriority')
-      priorityBuffer = { title: '', color: '', id_user: '' };
+    // let { value: priorityBuffer } = computed(() => store.getters.getPriority);
 
-    const { id_user, title, color, _id } = priorityBuffer;
+    // if (nameRoute === 'CreatePriority')
+    //   priorityBuffer = { title: '', color: '', id_user: '' };
 
-    if (priorityBuffer.title === '' && nameRoute === 'EditPriority')
-      router.replace('list');
+    // const { id_user, title, color, _id } = priorityBuffer;
+
+    // if (priorityBuffer.title === '' && nameRoute === 'EditPriority')
+    //   router.replace('list');
 
     return {
       menu,
       router,
       store,
       nameRoute,
-      priorityBuffer,
-      id: _id,
-      id_user,
-      title,
-      color
+      priority
     };
   },
   methods: {
     ...mapMutations(['setPriority']),
     async createPriority() {
-      if (this.title === '') return this.openToast('Llena el campo titulo');
-      if (this.color === '') return this.openToast('Selecciona un color');
+      if (this.priority.validate())
+        return this.openToast('Por favor llena todos los campos');
 
-      const priority: PriorityInterface = {
-        id_user: '',
-        title: this.title,
-        color: this.color
-      };
+      const { message, error } = await this.store.dispatch(
+        'saveReminder',
+        this.priority
+      );
 
-      if (this.nameRoute === 'EditPriority') {
-        priority._id = this.id;
-        priority.id_user = this.id_user;
+      this.openToast(message);
 
-        if (
-          this.priorityBuffer.title === priority.title &&
-          this.priorityBuffer.color === priority.color
-        ) {
-          this.router.replace('list');
-          this.setPriority({});
-          this.openToast('Se guardo correctamente');
-          return;
-        }
+      if (!error) this.router.replace('list');
 
-        const dataPriority = {
-          data: priority
-        };
-
-        const error = await this.store.dispatch(
-          PrioritiesTypes.UPDATE_PRIORITY,
-          dataPriority
-        );
-
-        if (error)
-          return this.openToast('Ha ocurrido un error vuelva a intentarlo');
-
-        this.openToast('Se guardo correctamente');
-        this.setPriority({});
-        this.router.replace('list');
-      } else {
-        const { message, error } = await this.store.dispatch(
-          PrioritiesTypes.SAVE_REMINDERS,
-          priority
-        );
-
-        this.openToast(message);
-
-        if (!error) this.router.replace('list');
-      }
-
-      this.store.dispatch(PrioritiesTypes.GET_PRIORITIES);
+      this.store.dispatch('getReminders');
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({
