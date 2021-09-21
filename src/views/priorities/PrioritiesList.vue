@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 import {
   IonPage,
   IonHeader,
@@ -32,15 +32,14 @@ import {
   IonTitle,
   IonButton,
   IonIcon
-} from "@ionic/vue";
-import { create } from "ionicons/icons";
-import { useRouter } from "vue-router";
-import ListPriorities from "@/components/priorities/ListPriorities.vue";
-import { useStore } from "vuex";
-import { PrioritiesTypes } from "@/types/PrioritiesTypes";
+} from '@ionic/vue';
+import { create } from 'ionicons/icons';
+import { useRouter } from 'vue-router';
+import ListPriorities from '@/components/priorities/ListPriorities.vue';
+import { useStore } from 'vuex';
 
 export default defineComponent({
-  name: "PrioritiesList",
+  name: 'PrioritiesList',
   components: {
     IonPage,
     IonHeader,
@@ -57,7 +56,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
 
-    store.dispatch(PrioritiesTypes.GET_PRIORITIES);
+    store.dispatch('getReminders');
 
     return {
       create,

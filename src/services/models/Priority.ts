@@ -1,20 +1,21 @@
 import { PriorityInterface } from '@/interfaces/Priority';
 
 export default class Priority {
-  public _id: string;
-  public id_user: string;
-  public title: string;
-  public color: string;
+  private _id = '';
 
-  constructor(priority?: PriorityInterface) {
-    this._id = priority?._id || '';
-    this.id_user = priority?.id_user || '';
-    this.title = priority?.title || '';
-    this.color = priority?.color || '';
+  public id_user = '';
+  public title = '';
+  public color = '';
+
+  public get id() {
+    return this._id;
   }
 
-  public set priority(priority: PriorityInterface) {
-    this._id = priority._id || '';
+  public set id(id: string) {
+    this._id = id;
+  }
+
+  public set priority(priority: any) {
     this.id_user = priority.id_user || '';
     this.title = priority.title || '';
     this.color = priority.color || '';
@@ -22,5 +23,9 @@ export default class Priority {
 
   public load(priority: PriorityInterface) {
     this.priority = { ...priority };
+  }
+
+  public validate(): boolean {
+    return this.title === '' || this.color === '';
   }
 }

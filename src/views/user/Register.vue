@@ -79,7 +79,6 @@ import {
 import { arrowBack } from 'ionicons/icons';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { UserTypes } from '@/types/UserTypes';
 import { UserInterface } from '@/interfaces/User';
 
 export default defineComponent({
@@ -134,7 +133,7 @@ export default defineComponent({
       user.email = this.email;
       user.password = this.password;
 
-      const message = await this.store.dispatch(UserTypes.REGISTER, user);
+      const message = await this.store.dispatch('registerUser', user);
 
       if (message === 'Registered user')
         return this.openToast('El email que ingresaste ya ha sido registrado');

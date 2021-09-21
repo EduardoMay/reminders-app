@@ -66,7 +66,6 @@ import {
 } from '@ionic/vue';
 import { home, heart, create, bookmark } from 'ionicons/icons';
 import { useStore } from 'vuex';
-import { UserTypes } from '@/types/UserTypes';
 import { computed, defineComponent, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import isEmpty from 'is-empty';
@@ -117,7 +116,7 @@ export default defineComponent({
     async logout() {
       this.openEnd();
 
-      await this.store.dispatch(UserTypes.LOGOUT);
+      await this.store.dispatch('logout');
 
       this.router.replace('/user/login');
     }

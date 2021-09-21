@@ -8,6 +8,7 @@ export default class Reminder {
   public description = '';
   public dateReminder: any;
   public priority: PriorityInterface = {
+    _id: '',
     id_user: '',
     title: '',
     color: ''
@@ -21,6 +22,7 @@ export default class Reminder {
     this.description = reminder.description || '';
     this.dateReminder = reminder.dateReminder;
     this.priority = reminder.priority || {
+      _id: '',
       id_user: '',
       title: '',
       color: ''
