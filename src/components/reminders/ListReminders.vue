@@ -18,7 +18,6 @@ import { menu } from 'ionicons/icons';
 import { mapMutations, useStore } from 'vuex';
 import { computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { ReminderTypes } from '@/types/ReminderTypes';
 import { ReminderInterface } from '@/interfaces/Reminder';
 
 export default defineComponent({
@@ -33,7 +32,7 @@ export default defineComponent({
     const store = useStore();
 
     onMounted(async () => {
-      await store.dispatch(ReminderTypes.GET_REMINDERS, {
+      await store.dispatch('getReminders', {
         idUser: store.state.UsersModule.user._id
       });
     });

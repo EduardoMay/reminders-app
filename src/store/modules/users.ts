@@ -1,11 +1,5 @@
-// Services
 import UserService from '@/services/UserService';
-// Types
-import { UserTypes } from '@/types/UserTypes';
-import { ReminderTypes } from '@/types/ReminderTypes';
-// Interfaces
 import { UserInterface } from '@/interfaces/User';
-// Vuex
 import { Commit, Dispatch } from 'vuex';
 
 const userService = new UserService();
@@ -33,7 +27,7 @@ const actions = {
 
       if (!data) return false;
 
-      commit(UserTypes.SET_DATA, data);
+      commit('setDataUser', data);
 
       return true;
     } catch ({ response }) {
@@ -47,20 +41,16 @@ const actions = {
     }: { user: UserInterface; status: boolean } = await userService.relogin();
     // TODO verificar el status al hacer relogin
 
-    commit(UserTypes.SET_DATA, user);
+    commit('setDataUser', user);
 
-    dispatch(
-      `${ReminderTypes.GET_REMINDERS}`,
-      { idUser: user._id },
-      {
-        root: true
-      }
-    );
+    dispatch('getReminders', null, {
+      root: true
+    });
   },
   async logout({ commit }: ParametersActions): Promise<void> {
     await userService.logout();
 
-    commit(UserTypes.LOGOUT);
+    commit('logout');
   },
   async registerUser(
     _: ParametersActions,

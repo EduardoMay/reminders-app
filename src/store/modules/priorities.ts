@@ -1,6 +1,5 @@
 import { Commit } from 'vuex';
 import { PrioritiesService } from '@/services/PrioritiesService';
-import { PrioritiesTypes } from '@/types/PrioritiesTypes';
 import { PriorityInterface } from '@/interfaces/Priority';
 import { UserInterface } from '@/interfaces/User';
 
@@ -18,16 +17,14 @@ interface StatePriority {
 
 const state = (): StatePriority => ({
   priorities: [],
-  prioritySelected: { id_user: '', title: '', color: '' }
+  prioritySelected: { id_user: '', title: '', color: '', _id: '' }
 });
 
 const actions = {
   async getPriorities({ commit }: ParametersActions) {
     const idUser = localStorage.idUser;
 
-    // const priorities: PriorityInterface[] = await priorityService.getPriorities(
-    //   idUser
-    // );
+    const priorities = await priorityService.getPriorities();
 
     // commit(PrioritiesTypes.SET_DATA, priorities);
   },
@@ -50,19 +47,15 @@ const actions = {
     { commit }: ParametersActions,
     priority: PriorityInterface
   ): Promise<string> {
-    const {
-      error,
-      priorities
-    }: {
-      error: boolean;
-      priorities: PriorityInterface[];
-    } = await priorityService.deletePriority(priority);
+    const { error, data, message } = await priorityService.deletePriority(
+      priority
+    );
 
     if (error) {
-      return 'Ah ocurrido un error vuelva a intentarlo nuevamente';
+      return message;
     }
 
-    commit(PrioritiesTypes.SET_DATA, priorities);
+    commit('setData', data);
 
     return 'Se ha borrado correctamente';
   }

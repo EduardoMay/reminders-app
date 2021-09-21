@@ -1,6 +1,6 @@
 import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
-import { UserRoutesApi } from '@/hook/user.routes';
+import { UserRoutesApi } from '@/services/routes/user.routes';
 import { UserInterface } from '@/interfaces/User';
 
 export default class UserService extends Model {

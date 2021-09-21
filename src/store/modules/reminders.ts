@@ -1,11 +1,6 @@
-// Interfaces
 import { ReminderInterface } from '@/interfaces/Reminder';
 import Reminder from '@/services/models/Reminder';
-// Services
 import ReminderService from '@/services/ReminderService';
-// Types
-import { ReminderTypes } from '@/types/ReminderTypes';
-// Store
 import { Commit } from 'vuex';
 
 const reminderService = new ReminderService();
@@ -36,14 +31,14 @@ const actions = {
 
     if (error) return message;
 
-    commit(ReminderTypes.SAVE_REMINDER, data);
+    commit('saveReminder', data);
 
     return message;
   },
   async getReminders({ commit }: ParametersActions): Promise<void> {
     const reminders = await reminderService.getReminders();
 
-    commit(ReminderTypes.GET_REMINDERS, reminders);
+    commit('getReminders', reminders);
   }
 };
 
