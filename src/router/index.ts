@@ -1,10 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-
-// Componentes
 import NotFound from '@/views/layouts/NotFound.vue';
-
-// Services
 import UserService from '@/services/UserService';
 
 const user = new UserService();

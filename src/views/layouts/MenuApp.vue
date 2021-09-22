@@ -93,7 +93,7 @@ export default defineComponent({
     });
 
     // Cuando recarga la aplicacion
-    if (!active.value) {
+    if (active.value) {
       onBeforeMount(async () => {
         await store.dispatch('relogin');
       });

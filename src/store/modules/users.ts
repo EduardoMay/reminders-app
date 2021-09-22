@@ -35,11 +35,7 @@ const actions = {
     }
   },
   async relogin({ commit, dispatch }: ParametersActions): Promise<void> {
-    const {
-      user,
-      status
-    }: { user: UserInterface; status: boolean } = await userService.relogin();
-    // TODO verificar el status al hacer relogin
+    const user = await userService.relogin();
 
     commit('setDataUser', user);
 
