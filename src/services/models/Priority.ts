@@ -1,18 +1,17 @@
 import { PriorityInterface } from '@/interfaces/Priority';
+import Model from './Model';
 
-export default class Priority {
-  private _id = '';
-
+export default class Priority extends Model {
   public id_user = '';
   public title = '';
   public color = '';
 
-  public get id() {
-    return this._id;
-  }
-
-  public set id(id: string) {
-    this._id = id;
+  public get data() {
+    return {
+      idUser: this.idUser,
+      title: this.title,
+      color: this.color
+    };
   }
 
   public set priority(priority: any) {

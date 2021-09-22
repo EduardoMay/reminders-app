@@ -43,8 +43,8 @@ import {
   toastController
 } from '@ionic/vue';
 import { menu } from 'ionicons/icons';
-import { mapMutations, useStore } from 'vuex';
-import { defineComponent } from 'vue';
+import { mapActions, mapMutations, useStore } from 'vuex';
+import { computed, defineComponent } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Priority from '@/services/models/Priority';
 
@@ -56,6 +56,8 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const priority = new Priority();
+    const { value: idUser } = computed(() => store.getters.getIdUser);
+    priority.idUser = idUser;
 
     const nameRoute = route.name;
 
@@ -79,20 +81,16 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations(['setPriority']),
+    ...mapActions(['savePriority']),
     async createPriority() {
       if (this.priority.validate())
         return this.openToast('Por favor llena todos los campos');
 
-      const { message, error } = await this.store.dispatch(
-        'saveReminder',
-        this.priority
-      );
+      const message = await this.savePriority(this.priority.data);
 
-      this.openToast(message);
+      if (message) return this.openToast(message);
 
-      if (!error) this.router.replace('list');
-
-      this.store.dispatch('getReminders');
+      return this.router.replace('list');
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({

@@ -29,16 +29,16 @@ const actions = {
     // commit(PrioritiesTypes.SET_DATA, priorities);
   },
   async savePriority(
-    { rootState }: ParametersActions,
+    { commit }: ParametersActions,
     priority: PriorityInterface
-  ) {
-    const { _id }: UserInterface = rootState.UsersModule.user;
-    priority.id_user = String(_id);
-    const data = { data: priority };
+  ): Promise<string | undefined> {
+    const { error, data, message } = await priorityService.savePriority(
+      priority
+    );
 
-    // const res = await priorityService.savePriority(data, priority.id_user);
+    if (error) return message;
 
-    // return res;
+    commit('setData', data);
   },
   async updatePriority(_: ParametersActions, dataPriority: any) {
     return await priorityService.updatePriority(dataPriority);
