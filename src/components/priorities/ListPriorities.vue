@@ -1,19 +1,13 @@
 <template>
-  <ion-list v-if="priorities.length > 0">
+  <ion-list v-if="state.priorities.length > 0">
     <ion-item
-      v-for="priority in priorities"
+      v-for="priority in state.priorities"
       :key="priority._id"
-      @click="presentActionSheet(priority)"
+      @click="presentActionSheet(priority._id)"
     >
       <ion-label>
         {{ priority.title }}
       </ion-label>
-      <ion-icon
-        :icon="create"
-        color="medium"
-        slot="end"
-        @click="() => editPriority(priority)"
-      />
     </ion-item>
   </ion-list>
 </template>
@@ -23,13 +17,12 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonIcon,
   actionSheetController,
   toastController
 } from '@ionic/vue';
 import { menu, create, trash, close } from 'ionicons/icons';
 import { mapActions, mapMutations, useStore } from 'vuex';
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { PriorityInterface } from '@/interfaces/Priority';
 
@@ -38,26 +31,28 @@ export default defineComponent({
   components: {
     IonList,
     IonItem,
-    IonLabel,
-    IonIcon
+    IonLabel
   },
   setup() {
     const router = useRouter();
     const store = useStore();
+    const state: { priorities: PriorityInterface[] } = reactive({
+      priorities: computed(() => store.getters.priorities)
+    });
 
     return {
       menu,
       create,
       router,
       store,
-      priorities: computed(() => store.state.PrioritiesModule.priorities)
+      state
     };
   },
   methods: {
-    ...mapMutations(['setPriority']),
-    ...mapActions(['deletePriority']),
-    editPriority(priority: PriorityInterface): void {
-      this.setPriority(priority);
+    ...mapMutations(['setSelected']),
+    ...mapActions(['deletePriority', 'getPriorities']),
+    editPriority(id: string): void {
+      this.setSelected(id);
       this.router.push('edit');
     },
     async openToast(title: string): Promise<any> {
@@ -67,7 +62,7 @@ export default defineComponent({
       });
       return toast.present();
     },
-    async presentActionSheet(priority: PriorityInterface): Promise<void> {
+    async presentActionSheet(id: string): Promise<void> {
       const actionSheet = await actionSheetController.create({
         header: 'Albums',
         cssClass: 'my-custom-class',
@@ -76,33 +71,30 @@ export default defineComponent({
             text: 'Eliminar',
             icon: trash,
             handler: async () => {
-              const message = await this.deletePriority(priority);
+              const message = await this.deletePriority(id);
 
-              this.openToast(message);
+              if (message) return this.openToast(message);
             }
           },
           {
             text: 'Editar',
             icon: create,
             handler: () => {
-              this.editPriority(priority);
+              this.editPriority(id);
             }
           },
           {
             text: 'Cancelar',
             icon: close,
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel clicked');
-            }
+            role: 'cancel'
           }
         ]
       });
       await actionSheet.present();
-
-      const { role } = await actionSheet.onDidDismiss();
-      console.log('onDidDismiss resolved with role', role);
     }
+  },
+  mounted() {
+    this.getPriorities();
   }
 });
 </script>

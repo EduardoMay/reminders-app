@@ -1,7 +1,6 @@
 import { Commit } from 'vuex';
 import { PrioritiesService } from '@/services/PrioritiesService';
 import { PriorityInterface } from '@/interfaces/Priority';
-import { UserInterface } from '@/interfaces/User';
 
 const priorityService = new PrioritiesService();
 
@@ -12,21 +11,19 @@ interface ParametersActions {
 
 interface StatePriority {
   priorities: PriorityInterface[];
-  prioritySelected: PriorityInterface;
+  idSelected: string;
 }
 
 const state = (): StatePriority => ({
   priorities: [],
-  prioritySelected: { id_user: '', title: '', color: '', _id: '' }
+  idSelected: ''
 });
 
 const actions = {
   async getPriorities({ commit }: ParametersActions) {
-    const idUser = localStorage.idUser;
-
     const priorities = await priorityService.getPriorities();
 
-    // commit(PrioritiesTypes.SET_DATA, priorities);
+    commit('setData', priorities);
   },
   async savePriority(
     { commit }: ParametersActions,
@@ -45,19 +42,13 @@ const actions = {
   },
   async deletePriority(
     { commit }: ParametersActions,
-    priority: PriorityInterface
+    id: string
   ): Promise<string> {
-    const { error, data, message } = await priorityService.deletePriority(
-      priority
-    );
-
-    if (error) {
-      return message;
-    }
+    const { message, data } = await priorityService.deletePriority(id);
 
     commit('setData', data);
 
-    return 'Se ha borrado correctamente';
+    return message;
   }
 };
 
@@ -65,14 +56,19 @@ const mutations = {
   setData(state: StatePriority, priorities: PriorityInterface[]): void {
     state.priorities = priorities;
   },
-  setPriority(state: StatePriority, priority: PriorityInterface) {
-    state.prioritySelected = priority;
+  setSelected(state: StatePriority, id: string) {
+    state.idSelected = id;
   }
 };
 
 const getters = {
-  getPriority(state: StatePriority) {
-    return state.prioritySelected;
+  getPrioritySelected(state: StatePriority) {
+    return state.priorities.find(
+      (priority) => priority._id === state.idSelected
+    );
+  },
+  priorities(state: StatePriority) {
+    return state.priorities;
   }
 };
 

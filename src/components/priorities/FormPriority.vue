@@ -1,4 +1,5 @@
 <template>
+  {{ sel }}
   <form @submit.prevent="createPriority()">
     <ion-item class="ion-margin-top">
       <ion-label position="floating">Titulo</ion-label>
@@ -47,6 +48,7 @@ import { mapActions, mapMutations, useStore } from 'vuex';
 import { computed, defineComponent } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Priority from '@/services/models/Priority';
+import { PriorityInterface } from '@/interfaces/Priority';
 
 export default defineComponent({
   name: 'FormPriorities',
@@ -61,7 +63,13 @@ export default defineComponent({
 
     const nameRoute = route.name;
 
-    // let { value: priorityBuffer } = computed(() => store.getters.getPriority);
+    if (nameRoute === 'EditPriority') {
+      const selected: PriorityInterface = store.getters.getPrioritySelected;
+      priority.id = selected._id;
+      priority.load(selected);
+
+      console.log(priority.data);
+    }
 
     // if (nameRoute === 'CreatePriority')
     //   priorityBuffer = { title: '', color: '', id_user: '' };
@@ -76,7 +84,8 @@ export default defineComponent({
       router,
       store,
       nameRoute,
-      priority
+      priority,
+      sel: computed(() => store.getters.getPrioritySelected)
     };
   },
   methods: {
