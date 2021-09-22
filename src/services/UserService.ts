@@ -13,9 +13,9 @@ export default class UserService extends Model {
 
     try {
       const { data } = await _axios.get(UserRoutesApi.VERIFY);
-      const { auth, token } = data;
+      const { error, token } = data;
 
-      if (auth) {
+      if (!error) {
         this.setToken(token);
         status = true;
       }
@@ -60,9 +60,12 @@ export default class UserService extends Model {
    * get data profile
    * @param id id user
    */
-  public async profile(id: string): Promise<any> {
+  public async profile(id: string): Promise<UserInterface | boolean> {
     const _axios = new Axios(this.idUser);
-    const { data } = await _axios.get(`${UserRoutesApi.GET_USER}/${id}`);
+    const res = await _axios.get(`${UserRoutesApi.GET_USER}/${id}`);
+    const { error, data } = res.data;
+
+    if (error) return false;
 
     return data;
   }
@@ -70,26 +73,22 @@ export default class UserService extends Model {
   /**
    * Re login user
    */
-  public async relogin(): Promise<{ user: UserInterface; status: boolean }> {
+  public async relogin(): Promise<UserInterface | boolean> {
     const _axios = new Axios(this.idUser);
-    const dataUser: { user: UserInterface; status: boolean } = {
-      user: {},
-      status: false
-    };
 
     try {
       const { data } = await _axios.get(UserRoutesApi.VERIFY);
-      const { auth, user }: { auth: boolean; user: UserInterface } = data;
+      const { error, user } = data;
 
-      localStorage.setItem('idUser', String(user._id));
+      localStorage.setItem('idUser', String(user.id));
 
-      if (auth) dataUser.user = user;
+      if (error) return false;
+
+      return user;
     } catch ({ response }) {
       this.clearToken();
-      dataUser.status = true;
+      return false;
     }
-
-    return dataUser;
   }
 
   /**

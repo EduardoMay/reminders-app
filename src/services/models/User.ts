@@ -1,5 +1,7 @@
 // import { UserInterface } from '@/interfaces/User';
 
+import { UserInterface } from '@/interfaces/User';
+
 export default class User {
   public email = '';
   public password = '';
@@ -13,7 +15,16 @@ export default class User {
     };
   }
 
+  public set user(user) {
+    this.email = user.email;
+    this.name = user.name;
+  }
+
   public validateLogin(): boolean {
     return this.email === '' || this.password === '';
+  }
+
+  public load(data: any) {
+    this.user = data;
   }
 }
