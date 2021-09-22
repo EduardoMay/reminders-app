@@ -50,6 +50,7 @@ import {
 } from '@ionic/vue';
 import { mapActions, mapGetters, useStore } from 'vuex';
 import { UserInterface } from '@/interfaces/User';
+import User from '@/services/models/User';
 
 export default defineComponent({
   name: 'Profile',
@@ -66,29 +67,18 @@ export default defineComponent({
     IonItem,
     IonLabel
   },
-  data() {
-    return {
-      user: { email: '', name: 'No definido' }
-    };
-  },
   setup() {
     const store = useStore();
+    const user = new User();
 
-    return { store };
-  },
-  methods: {
-    ...mapActions(['profile'])
+    return { store, user };
   },
   computed: {
-    ...mapGetters(['getIdUser'])
+    ...mapGetters(['getUser'])
   },
   async mounted() {
-    const { user }: { user: UserInterface } = await this.profile(
-      this.getIdUser
-    );
-
-    this.user.email = String(user.email);
-    this.user.name = user.name ? user.name : 'No definido';
+    const user = this.getUser;
+    this.user.load(user);
   }
 });
 </script>

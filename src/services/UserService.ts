@@ -60,9 +60,12 @@ export default class UserService extends Model {
    * get data profile
    * @param id id user
    */
-  public async profile(id: string): Promise<any> {
+  public async profile(id: string): Promise<UserInterface | boolean> {
     const _axios = new Axios(this.idUser);
-    const { data } = await _axios.get(`${UserRoutesApi.GET_USER}/${id}`);
+    const res = await _axios.get(`${UserRoutesApi.GET_USER}/${id}`);
+    const { error, data } = res.data;
+
+    if (error) return false;
 
     return data;
   }
