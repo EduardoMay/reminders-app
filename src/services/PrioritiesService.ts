@@ -39,21 +39,19 @@ export class PrioritiesService extends Model {
    * @param priority Data priority
    */
   public async updatePriority(
-    priority: PriorityInterface
-  ): Promise<PriorityInterface[] | boolean> {
+    priority: any
+  ): Promise<ResponseApiInterface<PriorityInterface[]>> {
     const _axios = new Axios(this.idUser);
 
     const { data } = await _axios.patch(
       PrioritiesRoutesAPi.UPDATE,
-      priority._id,
+      priority.id,
       priority
     );
 
-    const { error } = new ResponseApi<PriorityInterface[]>(data);
+    const response = new ResponseApi<PriorityInterface[]>(data);
 
-    if (error) return false;
-
-    return data;
+    return response;
   }
 
   /**

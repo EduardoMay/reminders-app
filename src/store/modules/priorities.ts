@@ -37,8 +37,14 @@ const actions = {
 
     commit('setData', data);
   },
-  async updatePriority(_: ParametersActions, dataPriority: any) {
-    return await priorityService.updatePriority(dataPriority);
+  async updatePriority({ commit }: ParametersActions, priority: any) {
+    const { error, data, message } = await priorityService.updatePriority(
+      priority
+    );
+
+    if (error) return message;
+
+    commit('setData', data);
   },
   async deletePriority(
     { commit }: ParametersActions,

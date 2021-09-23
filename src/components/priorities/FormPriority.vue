@@ -1,5 +1,4 @@
 <template>
-  {{ sel }}
   <form @submit.prevent="createPriority()">
     <ion-item class="ion-margin-top">
       <ion-label position="floating">Titulo</ion-label>
@@ -45,7 +44,7 @@ import {
 } from '@ionic/vue';
 import { menu } from 'ionicons/icons';
 import { mapActions, mapMutations, useStore } from 'vuex';
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Priority from '@/services/models/Priority';
 import { PriorityInterface } from '@/interfaces/Priority';
@@ -59,47 +58,45 @@ export default defineComponent({
     const store = useStore();
     const priority = new Priority();
     const { value: idUser } = computed(() => store.getters.getIdUser);
+
     priority.idUser = idUser;
 
-    const nameRoute = route.name;
+    const isEdit = route.name === 'EditPriority';
 
-    if (nameRoute === 'EditPriority') {
+    if (isEdit) {
       const selected: PriorityInterface = store.getters.getPrioritySelected;
-      priority.id = selected._id;
-      priority.load(selected);
 
-      console.log(priority.data);
+      if (selected) {
+        priority.id = selected._id;
+        priority.load(selected);
+      } else router.replace('list');
     }
-
-    // if (nameRoute === 'CreatePriority')
-    //   priorityBuffer = { title: '', color: '', id_user: '' };
-
-    // const { id_user, title, color, _id } = priorityBuffer;
-
-    // if (priorityBuffer.title === '' && nameRoute === 'EditPriority')
-    //   router.replace('list');
 
     return {
       menu,
       router,
       store,
-      nameRoute,
-      priority,
-      sel: computed(() => store.getters.getPrioritySelected)
+      isEdit,
+      priority
     };
   },
   methods: {
+    ...mapActions(['savePriority', 'updatePriority']),
     ...mapMutations(['setPriority']),
-    ...mapActions(['savePriority']),
     async createPriority() {
+      let message;
       if (this.priority.validate())
         return this.openToast('Por favor llena todos los campos');
 
-      const message = await this.savePriority(this.priority.data);
+      if (!this.isEdit) {
+        message = await this.savePriority(this.priority.data);
+      } else {
+        message = await this.updatePriority(this.priority.dataUpdate);
+      }
 
       if (message) return this.openToast(message);
 
-      return this.router.replace('list');
+      this.router.back();
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({
