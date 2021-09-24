@@ -1,19 +1,9 @@
 import { ReminderInterface } from '@/interfaces/Reminder';
 import Reminder from '@/services/models/Reminder';
 import ReminderService from '@/services/ReminderService';
-import { Commit } from 'vuex';
+import { ParametersActions, StateReminder } from './interfaces/Store';
 
 const reminderService = new ReminderService();
-
-interface ParametersActions {
-  commit: Commit;
-}
-
-interface StateReminder {
-  reminders: ReminderInterface[];
-  idUser: string;
-  reminder: ReminderInterface;
-}
 
 const state = (): StateReminder => ({
   reminders: [],

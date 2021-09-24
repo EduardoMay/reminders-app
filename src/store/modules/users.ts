@@ -1,17 +1,8 @@
 import UserService from '@/services/UserService';
 import { UserInterface } from '@/interfaces/User';
-import { Commit, Dispatch } from 'vuex';
+import { ParametersActions, StateUser } from './interfaces/Store';
 
 const userService = new UserService();
-
-interface ParametersActions {
-  commit: Commit;
-  dispatch: Dispatch;
-}
-
-interface StateUser {
-  user: UserInterface;
-}
 
 const state = (): StateUser => ({
   user: {}

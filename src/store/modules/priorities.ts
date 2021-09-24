@@ -1,18 +1,8 @@
-import { Commit } from 'vuex';
 import { PrioritiesService } from '@/services/PrioritiesService';
 import { PriorityInterface } from '@/interfaces/Priority';
+import { ParametersActions, StatePriority } from './interfaces/Store';
 
 const priorityService = new PrioritiesService();
-
-interface ParametersActions {
-  commit: Commit;
-  rootState: any;
-}
-
-interface StatePriority {
-  priorities: PriorityInterface[];
-  idSelected: string;
-}
 
 const state = (): StatePriority => ({
   priorities: [],
