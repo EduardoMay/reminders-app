@@ -15,7 +15,7 @@ export default class UserService extends Model {
       const { data } = await _axios.get(UserRoutesApi.VERIFY);
       const { error, token } = data;
 
-      if (!error) {
+      if (error) {
         this.setToken(token);
         status = true;
       }
@@ -51,9 +51,10 @@ export default class UserService extends Model {
   public async register(user: UserInterface): Promise<string> {
     const _axios = new Axios(this.idUser);
     const { data } = await _axios.post(UserRoutesApi.REGISTER, user);
-    const { message } = data;
 
-    return message;
+    console.log(data);
+
+    return 'message';
   }
 
   /**
