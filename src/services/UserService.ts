@@ -48,13 +48,12 @@ export default class UserService extends Model {
    * Register new user
    * @param user data user
    */
-  public async register(user: UserInterface): Promise<string> {
+  public async register(user: UserInterface): Promise<Array<any>> {
     const _axios = new Axios(this.idUser);
-    const { data } = await _axios.post(UserRoutesApi.REGISTER, user);
+    const res = await _axios.post(UserRoutesApi.REGISTER, user);
+    const { error, message } = res.data;
 
-    console.log(data);
-
-    return 'message';
+    return [error, message];
   }
 
   /**

@@ -42,10 +42,10 @@ const actions = {
   async registerUser(
     _: ParametersActions,
     user: UserInterface
-  ): Promise<string> {
-    const message = await userService.register(user);
+  ): Promise<Array<any>> {
+    const res = await userService.register(user);
 
-    return message;
+    return res;
   },
   async profile(_: ParametersActions, id: string): Promise<any> {
     const data = await userService.profile(id);

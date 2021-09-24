@@ -107,12 +107,10 @@ export default defineComponent({
   methods: {
     ...mapActions(['loginUser']),
     async login() {
-      const emailPatter = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
       if (this.user.validateLogin())
         return this.openToast('Ingrese correo y contraseña');
 
-      if (!emailPatter.test(this.user.email))
+      if (!this.user.validateEmail())
         return this.openToast('Ingresa un correo valido');
 
       const res = await this.loginUser(this.user);
