@@ -110,15 +110,15 @@ export default defineComponent({
     };
   },
   methods: {
-    openEnd() {
-      menuController.close('start');
+    async openEnd() {
+      await menuController.close('start');
     },
     async logout() {
-      this.openEnd();
+      await this.openEnd();
 
       await this.store.dispatch('logout');
 
-      this.router.replace('/user/login');
+      await this.router.replace('/user/login');
     }
   }
 });
