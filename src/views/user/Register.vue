@@ -122,14 +122,8 @@ export default defineComponent({
   },
   methods: {
     async register() {
-      if (this.user.validateRegister())
-        return this.openToast('Los campos son obligatorios');
-
-      if (!this.user.validateEmail())
-        return this.openToast('Ingresa un correo valido');
-
-      if (this.user.validatePassword())
-        return this.openToast('Las contraseñas no son iguales');
+      if (!this.user.validateRegister())
+        return this.openToast(this.user.messageError);
 
       const [error, message] = await this.store.dispatch(
         'registerUser',

@@ -13,9 +13,9 @@ export default class UserService extends Model {
 
     try {
       const { data } = await _axios.get(UserRoutesApi.VERIFY);
-      const { error, token } = data;
+      const { error, token, message } = data;
 
-      if (!error) {
+      if (!error && message === undefined) {
         this.setToken(token);
         status = true;
       }

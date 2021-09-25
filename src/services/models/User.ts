@@ -3,6 +3,7 @@ export default class User {
   public email = '';
   public password = '';
   public replyPassword = '';
+  public messageError = '';
 
   public get user() {
     return {
@@ -22,9 +23,15 @@ export default class User {
   }
 
   public validateRegister(): boolean {
-    return (
-      this.email === '' || this.password === '' || this.replyPassword === ''
-    );
+    if (this.email === '' || this.password === '' || this.replyPassword === '')
+      this.messageError = 'Favor de llenar todos los campos';
+    else if (!this.validateEmail())
+      this.messageError = 'Ingresa un correo valido';
+    else if (this.password !== this.replyPassword)
+      this.messageError = 'Las contraseñas no coinciden';
+    else this.messageError = '';
+
+    return this.messageError === '';
   }
 
   public validateEmail(): boolean {
