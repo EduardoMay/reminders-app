@@ -1,8 +1,8 @@
-import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
 import { PrioritiesRoutesAPi } from '@/services/routes/priorities.routes';
 import { PriorityInterface } from '@/interfaces/Priority';
 import ResponseApi, { ResponseApiInterface } from '@/interfaces/ResponseApi';
+import Model from './models/Model';
 
 export class PrioritiesService extends Model {
   /**

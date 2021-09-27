@@ -1,8 +1,8 @@
-import Model from '@/extends/Model';
 import Axios from '@/hook/Axios';
 import { RemindersRoutesAPi } from '@/services/routes/reminders.routes';
 import { ReminderInterface } from '@/interfaces/Reminder';
 import ResponseApi, { ResponseApiInterface } from '@/interfaces/ResponseApi';
+import Model from './models/Model';
 
 export default class ReminderService extends Model {
   /**

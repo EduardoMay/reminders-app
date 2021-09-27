@@ -2,6 +2,10 @@ export default class Model {
   private _id = '';
   private _idUser = '';
 
+  constructor() {
+    this.idUser = localStorage.idUser || '';
+  }
+
   public get id() {
     return this._id;
   }
@@ -11,10 +15,10 @@ export default class Model {
   }
 
   public get idUser() {
-    return this._idUser;
+    return localStorage.idUser || this._idUser;
   }
 
   public set idUser(idUser: string) {
-    this._idUser = idUser;
+    this._idUser = localStorage.idUser || idUser;
   }
 }
