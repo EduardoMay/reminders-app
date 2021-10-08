@@ -37,6 +37,9 @@ export default class User {
   public validateEmail(): boolean {
     const emailPatter = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+    if (!emailPatter.test(this.email))
+      this.messageError = 'Ingrese un correo valido';
+
     return emailPatter.test(this.email);
   }
 

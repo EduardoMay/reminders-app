@@ -47,6 +47,11 @@ const actions = {
 
     return res;
   },
+  async requestPassword(_: ParametersActions, email: string): Promise<any> {
+    const data = await userService.requestPassword(email);
+
+    return data;
+  },
   async profile(_: ParametersActions, id: string): Promise<any> {
     const data = await userService.profile(id);
 

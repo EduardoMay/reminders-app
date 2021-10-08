@@ -2,10 +2,10 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-buttons slot="start" v-if="formCode">
+        <ion-buttons slot="start">
           <ion-back-button default-href="/user/login"></ion-back-button>
         </ion-buttons>
-        <ion-title>Iniciar Sesión</ion-title>
+        <ion-title>Recupearar contraseña</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -17,17 +17,7 @@
             id="email"
             type="email"
             v-model="user.email"
-            v-on:keyup.enter="login()"
-          ></ion-input>
-        </ion-item>
-
-        <ion-item class="ion-margin-top">
-          <ion-label position="floating">Contraseña</ion-label>
-          <ion-input
-            id="password"
-            type="password"
-            v-model="user.password"
-            v-on:keyup.enter="login()"
+            v-on:keyup.enter="requestPassword()"
           ></ion-input>
         </ion-item>
 
@@ -35,26 +25,9 @@
           <ion-button
             expand="full"
             class="ion-margin-top"
-            id="buttonForm"
-            @click="login()"
+            @click="requestPassword()"
           >
-            Iniciar sesión
-          </ion-button>
-          <ion-button
-            color="light"
-            expand="full"
-            class="ion-margin-top"
-            @click="() => router.push('/user/register')"
-          >
-            Registrarse
-          </ion-button>
-          <ion-button
-            color="light"
-            expand="full"
-            class="ion-margin-top"
-            @click="() => router.push('/user/request-password')"
-          >
-            Recupearar contraseña
+            Recupearar
           </ion-button>
         </div>
       </div>
@@ -80,11 +53,11 @@ import {
 } from '@ionic/vue';
 import { arrowBack } from 'ionicons/icons';
 import { useRoute, useRouter } from 'vue-router';
-import { mapActions, useStore } from 'vuex';
+import { useStore } from 'vuex';
 import User from '@/services/models/User';
 
 export default defineComponent({
-  name: 'LoginUser',
+  name: 'RequestPassword',
   components: {
     IonContent,
     IonHeader,
@@ -107,24 +80,25 @@ export default defineComponent({
     return {
       router,
       arrowBack,
-      formCode: computed(() => route.name === 'Code'),
       store,
+      id: computed(() => route.params.id),
       user
     };
   },
   methods: {
-    ...mapActions(['loginUser']),
-    async login() {
-      if (this.user.validateLogin())
-        return this.openToast('Ingrese correo y contraseña');
-
+    async requestPassword() {
       if (!this.user.validateEmail())
-        return this.openToast('Ingresa un correo valido');
+        return this.openToast(this.user.messageError);
 
-      const res = await this.loginUser(this.user);
-      if (!res) return this.openToast('Correo y contraseña son incorrectos');
+      const [error, message] = await this.store.dispatch(
+        'requestPassword',
+        this.user.email
+      );
 
-      this.router.replace(`/reminders`);
+      if (error) return this.openToast(message);
+      this.openToast(message);
+
+      this.router.back();
     },
     async openToast(title: string): Promise<any> {
       const toast = await toastController.create({

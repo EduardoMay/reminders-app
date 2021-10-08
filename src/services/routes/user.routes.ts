@@ -4,5 +4,6 @@ export const UserRoutesApi = {
   GET_USER: 'users/user',
   UPDATE_USER: 'users/update',
   VERIFY: 'users/verify',
-  LOGOUT: 'users/logout'
+  LOGOUT: 'users/logout',
+  REQUEST_PASSWORD: 'users/request-recovery-password'
 };

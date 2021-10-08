@@ -31,6 +31,16 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/user/request-password',
+    name: 'RequestPassword',
+    component: () => import('@/views/user/RequestPassword.vue'),
+    beforeEnter: async (to, from, next) => {
+      if (to.name !== 'Reminders' && (await user.verifyToken()))
+        next({ name: 'Reminders' });
+      else next();
+    }
+  },
+  {
     path: '/reminders',
     name: 'Reminders',
     component: () => import('@/views/reminders/Reminders.vue'),
