@@ -69,6 +69,19 @@ export default class UserService extends Model {
   }
 
   /**
+   * Request password user
+   * @param data email user
+   */
+  public async restorePassword(data: object): Promise<Array<any>> {
+    const _axios = new Axios(this.idUser);
+    const res = await _axios.post(UserRoutesApi.RESTORE_PASSWORD, data);
+    console.log(res.data);
+    const { error, message } = res.data;
+
+    return [error, message];
+  }
+
+  /**
    * get data profile
    * @param id id user
    */

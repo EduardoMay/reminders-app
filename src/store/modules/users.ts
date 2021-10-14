@@ -52,6 +52,13 @@ const actions = {
 
     return data;
   },
+  async restorePassword(_: ParametersActions, dataRestorePassword: any) {
+    const data = await userService.restorePassword(dataRestorePassword);
+
+    console.log(data);
+
+    return []
+  },
   async profile(_: ParametersActions, id: string): Promise<any> {
     const data = await userService.profile(id);
 
