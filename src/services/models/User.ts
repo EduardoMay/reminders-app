@@ -4,6 +4,7 @@ export default class User {
   public password = '';
   public replyPassword = '';
   public messageError = '';
+  public token = '';
 
   public get user() {
     return {
@@ -16,6 +17,17 @@ export default class User {
   public set user(user) {
     this.email = user.email;
     this.name = user.name;
+  }
+
+  public get restorePasswordData() {
+    return {
+      token: this.token,
+      password: this.password,
+    }
+  }
+
+  public set loadToken(token: string) {
+    this.token = token
   }
 
   public validateLogin(): boolean {
@@ -44,7 +56,9 @@ export default class User {
   }
 
   public validatePassword(): boolean {
-    return this.password !== this.replyPassword;
+    if (this.password !== this.replyPassword) this.messageError = 'Las contraseñas no coinciden'
+
+    return this.password === this.replyPassword;
   }
 
   public load(data: any) {
