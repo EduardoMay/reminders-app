@@ -44,7 +44,7 @@ import {
 } from '@ionic/vue';
 import { menu } from 'ionicons/icons';
 import { mapActions, mapMutations, useStore } from 'vuex';
-import { computed, defineComponent, reactive } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Priority from '@/services/models/Priority';
 import { PriorityInterface } from '@/interfaces/Priority';

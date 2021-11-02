@@ -11,9 +11,7 @@
 
     <ion-content>
       <ion-list>
-        <ion-list-header>
-          Información
-        </ion-list-header>
+        <ion-list-header>Información</ion-list-header>
 
         <ion-item>
           <ion-label>
@@ -48,8 +46,7 @@ import {
   IonItem,
   IonLabel
 } from '@ionic/vue';
-import { mapActions, mapGetters, useStore } from 'vuex';
-import { UserInterface } from '@/interfaces/User';
+import { mapGetters, useStore } from 'vuex';
 import User from '@/services/models/User';
 
 export default defineComponent({
